@@ -54,4 +54,6 @@
     <string name="appAbout">AjerliTaxiPassenger Version: </string>
     <string name="str_default">Default</string>
     <string name="str_noDrivers">No nearby drivers for now</string>
+    <string name="str_noLocation">No fixed position</string>
+
 </resources>

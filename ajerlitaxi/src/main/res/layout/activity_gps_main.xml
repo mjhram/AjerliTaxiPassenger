@@ -19,7 +19,7 @@
             android:layout_height="55dp"
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/ajerliColor"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:contentInsetStart="72dp">
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,158 +62,193 @@
             </android.support.v7.widget.Toolbar>
         <!-- As the main content view, the view below consumes the entire
              space available using match_parent in both dimensions. -->
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
-            xmlns:ndroid="http://schemas.android.com/tools"
-            ndroid:paddingTop="@dimen/activity_vertical_margin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar">
-            <fragment
-                android:id="@+id/location_map"
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                xmlns:ndroid="http://schemas.android.com/tools"
+                ndroid:paddingTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                class="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_alignParentBottom="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btnPickFrom"
-                android:id="@+id/btnPickDrop"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:textSize="22dp"
-                android:onClick="onPickDropClick"
-                android:layout_alignParentBottom="true"
-                android:alpha=".7" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@drawable/customborder"
-                android:id="@+id/relativeLayoutAds"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_above="@+id/driverLayout"
-                >
-                <LinearLayout
+                android:layout_below="@+id/toolbar">
+                <fragment
+                    android:id="@+id/location_map"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
-                    <com.android.volley.toolbox.NetworkImageView
-                        android:id="@+id/networkivAds"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:adjustViewBounds="true"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginBottom="0dp"
-                        android:scaleType="fitCenter"
-                        android:clickable="false"
-                        android:alpha=".5"
-                        android:layout_weight="1"
-                        />
-                    <TextView
-                        android:id="@+id/textview_ads"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="20dp"
-                        android:gravity="center"
-                        android:text="---"
-                        android:layout_weight="0"
-                        android:maxLines="3"
-                        />
-                </LinearLayout>
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text=""
-                    android:id="@+id/btnAdsX"
-                    android:src = "@drawable/close"
-                    android:background="#00000000"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:background="@drawable/customborder"
-                android:id="@+id/driverLayout"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/driverLabel"
-                    android:id="@+id/textViewDriverName"
-                    android:layout_alignTop="@+id/imageViewDriver"
-                    android:layout_toRightOf="@+id/imageViewDriver"
-                    android:layout_toEndOf="@+id/imageViewDriver" />
-
-                <!--ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:id="@+id/imageViewDriver2"
-                    android:src="@drawable/portraitplaceholder"
+                    class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:visibility="gone"
-                    android:alpha=".6"/ -->
-
-                <com.android.volley.toolbox.NetworkImageView
-                    android:id="@+id/imageViewDriver"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/portraitplaceholder"
-                    android:alpha=".6"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/infoLabel"
-                    android:id="@+id/textViewDriverInfo"
-                    android:layout_below="@+id/textViewDriverName"
-                    android:layout_toRightOf="@+id/imageViewDriver"
-                    android:layout_toEndOf="@+id/imageViewDriver" />
+                    />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text=""
-                    android:id="@+id/btnDriverPhone"
-                    android:drawablePadding="15dp"
-                    android:drawableRight = "@drawable/phone"
-
-                    android:background="#00000000"
-                    android:layout_alignParentBottom="true"
+                    android:text="@string/btnPickFrom"
+                    android:id="@+id/btnPickDrop"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:textSize="22dp"
+                    android:onClick="onPickDropClick"
+                    android:layout_alignParentBottom="true"
+                    android:alpha=".7" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/customborder"
+                    android:id="@+id/relativeLayoutAds"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_above="@+id/driverLayout"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:id="@+id/networkivAds"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:adjustViewBounds="true"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp"
+                            android:scaleType="fitCenter"
+                            android:clickable="false"
+                            android:alpha=".5"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:id="@+id/textview_ads"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="20dp"
+                            android:gravity="center"
+                            android:text="---"
+                            android:layout_weight="0"
+                            android:maxLines="3"
+                            />
+                    </LinearLayout>
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text=""
+                        android:id="@+id/btnAdsX"
+                        android:src = "@drawable/close"
+                        android:background="#00000000"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:background="@drawable/customborder"
+                    android:id="@+id/driverLayout"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/driverLabel"
+                        android:id="@+id/textViewDriverName"
+                        android:layout_alignTop="@+id/imageViewDriver"
+                        android:layout_toRightOf="@+id/imageViewDriver"
+                        android:layout_toEndOf="@+id/imageViewDriver" />
+
+                    <!--ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/imageViewDriver2"
+                        android:src="@drawable/portraitplaceholder"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:visibility="gone"
+                        android:alpha=".6"/ -->
+
+                    <com.android.volley.toolbox.NetworkImageView
+                        android:id="@+id/imageViewDriver"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/portraitplaceholder"
+                        android:alpha=".6"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="@string/infoLabel"
+                        android:id="@+id/textViewDriverInfo"
+                        android:layout_below="@+id/textViewDriverName"
+                        android:layout_toRightOf="@+id/imageViewDriver"
+                        android:layout_toEndOf="@+id/imageViewDriver" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text=""
+                        android:id="@+id/btnDriverPhone"
+                        android:drawablePadding="15dp"
+                        android:drawableRight = "@drawable/phone"
+
+                        android:background="#00000000"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                </RelativeLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@android:drawable/ic_input_add" />
             </RelativeLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:src="@android:drawable/ic_input_add" />
-        </RelativeLayout>
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#88666666"
+                android:id="@+id/helpoverly_layout"
+                >
+                <ImageView
+                    android:id="@+id/ivHelpMyLocationBtn"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:clickable="false"
+                    android:layout_marginTop="20dp"
+                    android:paddingRight="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/helpmyloc" />
+                <ImageView
+                    android:id="@+id/ivHelpNavDrawer"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:clickable="false"
+                    android:paddingRight="50dp"
+                    android:paddingEnd="50dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/helpnavdrawer"
+                    android:layout_below="@+id/ivHelpMyLocationBtn"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+       </FrameLayout>
     </RelativeLayout>
 
 

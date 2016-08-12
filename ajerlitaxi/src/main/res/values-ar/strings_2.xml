@@ -54,5 +54,6 @@
     <string name="appAbout">AjerliTaxiDriver الاصدار:</string>
     <string name="str_default">افتراضي</string>
     <string name="str_noDrivers">لا سائقين قريبين حاليا</string>
+    <string name="str_noLocation">الموقع غير محدد</string>
 
 </resources>

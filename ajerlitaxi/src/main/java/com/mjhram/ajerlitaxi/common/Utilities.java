@@ -27,6 +27,7 @@ import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.maps.model.LatLng;
@@ -49,6 +50,12 @@ public class Utilities {
 
     private static MaterialDialog pd;
     private static org.slf4j.Logger tracer = LoggerFactory.getLogger(Utilities.class.getSimpleName());
+
+    public static int dpToPx(Context cx, int dp) {
+        DisplayMetrics displayMetrics = cx.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
 
     public static double toRadiusMeters(LatLng center, LatLng radius) {
         float[] result = new float[1];

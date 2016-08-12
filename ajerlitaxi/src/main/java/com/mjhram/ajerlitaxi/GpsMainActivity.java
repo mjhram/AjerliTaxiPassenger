@@ -44,6 +44,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -83,6 +84,7 @@ import com.heinrichreimersoftware.materialdrawer.DrawerView;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.mjhram.ajerlitaxi.Faq.Faqtivity;
 import com.mjhram.ajerlitaxi.common.AppSettings;
+import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.common.EventBusHook;
 import com.mjhram.ajerlitaxi.common.Session;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
@@ -126,6 +128,7 @@ public class GpsMainActivity extends GenericViewFragment
     private Marker[] nearbyDrivers = null;
     //private Circle mapsSearchCircle = null;
     private Polygon searchPolygon;
+    private HashMap<Marker, DriverInfo> mMarkerInfoHash = new HashMap<>();
 
     //private ActionProcessButton actionButton;
     private GoogleApiClient mGoogleApiClient;
@@ -143,6 +146,7 @@ public class GpsMainActivity extends GenericViewFragment
     private ImageView btnAdsX;
     private NetworkImageView networkivAds;
     private TextView textviewAds;
+    private  RelativeLayout helpOverlayLayout;
 
     public String suggestedFee, noOfPassangers, additionalNotes;
 
@@ -164,7 +168,19 @@ public class GpsMainActivity extends GenericViewFragment
         txtDriverName = (TextView) findViewById(R.id.textViewDriverName);
         txtDriverInfo = (TextView) findViewById(R.id.textViewDriverInfo);
         networkImageViewDriver = (NetworkImageView) findViewById(R.id.imageViewDriver);
-
+        helpOverlayLayout = (RelativeLayout) findViewById(R.id.helpoverly_layout);
+        helpOverlayLayout.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                helpOverlayLayout.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        if(AppSettings.isShowHelpOverly()) {
+            helpOverlayLayout.setVisibility(View.VISIBLE);
+        } else {
+            helpOverlayLayout.setVisibility(View.GONE);
+        }
         btnDriverPhone = (Button) findViewById(R.id.btnDriverPhone);
         btnDriverPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,13 +252,33 @@ public class GpsMainActivity extends GenericViewFragment
                                                     if (location != null) {
                                                         UploadClass uc = new UploadClass(GpsMainActivity.this);
                                                         uc.getNearbyDrivers(location);
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
+                                                                , Toast.LENGTH_LONG).show();
                                                     }
                                                 }
                                             }
                                         }
 
         );
-        //map.setOnMyLocationButtonClickListener(this);
+        googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this, mMarkerInfoHash));
+        int h = Utilities.dpToPx(this, 50);//btnPickDrop.getHeight();
+        map.setPadding(0,0,0,h);
+        map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                //helpOverlayLayout.setVisibility(View.GONE);
+                Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if(location == null) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.str_noLocation)
+                            , Toast.LENGTH_LONG).show();
+                    helpOverlayLayout.setVisibility(View.VISIBLE);
+                } else {
+                    helpOverlayLayout.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
         /*Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null)
         {
@@ -771,6 +807,7 @@ public class GpsMainActivity extends GenericViewFragment
     }
 
     void setStateTo(TRequestObj tRequestObj) {
+        helpOverlayLayout.setVisibility(View.GONE);
         btnPickDrop.setVisibility(View.GONE);
         driverInfoLayout.setVisibility(View.VISIBLE);
         txtDriverName.setText(tRequestObj.driverName);
@@ -802,7 +839,8 @@ public class GpsMainActivity extends GenericViewFragment
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(currentPosition)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .draggable(true);
+                    //.draggable(true)
+                    ;
             ;
             fromMarker = googleMap.addMarker(markerOptions);
         } else {
@@ -814,7 +852,8 @@ public class GpsMainActivity extends GenericViewFragment
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(currentPosition)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                    .draggable(false);
+                    //.draggable(false)
+                    ;
             toMarker = googleMap.addMarker(markerOptions);
         } else {
             toMarker.setPosition(currentPosition);
@@ -831,6 +870,7 @@ public class GpsMainActivity extends GenericViewFragment
     }
 
     private void clearDriversMarkers() {
+        mMarkerInfoHash.clear();
         if(nearbyDrivers != null) {
             for (int i = 0; i < countOfDrivers; i++) {
                 nearbyDrivers[i].remove();
@@ -854,8 +894,7 @@ public class GpsMainActivity extends GenericViewFragment
     @EventBusHook
     public void onEventMainThread(ServiceEvents.updateDrivers updateDriversEvent){
         tracer.debug("updating nearby driver");
-        double[] drvLat = updateDriversEvent.drvLat;
-        double[] drvLong = updateDriversEvent.drvLong;
+        DriverInfo[] driverInfo = updateDriversEvent.drvInfo;
         double lat_dw = updateDriversEvent.lat_d;
         double lng_dw = updateDriversEvent.lng_d;
 
@@ -889,14 +928,18 @@ public class GpsMainActivity extends GenericViewFragment
         countOfDrivers = updateDriversEvent.drvCount;
         nearbyDrivers = new Marker[countOfDrivers];
         for(int i=0; i<updateDriversEvent.drvCount;i++) {
-            LatLng driverPosition = new LatLng(drvLat[i], drvLong[i]);
+            LatLng driverPosition = new LatLng(driverInfo[i].latitude, driverInfo[i].longitude);
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(driverPosition)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi))
-                    .anchor(0.5f, 0.5f)
-                    .draggable(true);
-            ;
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.taximarker))
+                    .title(driverInfo[i].name)
+                    //.snippet(driverInfo[i].phone)
+                    //.anchor(0.5f, 0.5f)
+                    //.draggable(true);
+                    ;
+
             nearbyDrivers[i] = googleMap.addMarker(markerOptions);
+            mMarkerInfoHash.put(nearbyDrivers[i], driverInfo[i]);
         }
     }
 
@@ -908,9 +951,9 @@ public class GpsMainActivity extends GenericViewFragment
         if(driverMarker == null) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(driverPosition)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi))
-                    .anchor(0.5f, 0.5f)
-                    .draggable(true);
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.taximarker))
+                    //.anchor(0.5f, 0.5f)
+                    //.draggable(true);
             ;
             driverMarker = googleMap.addMarker(markerOptions);
         } else {
@@ -1337,16 +1380,20 @@ public class GpsMainActivity extends GenericViewFragment
         UploadClass uc;
         switch(pickdropState) {
             case 0://0 is idle, change to 1=pickFrom is assigned
-                pickdropState = 1;
                 if (mGoogleApiClient.isConnected()) {
                     Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    if(mLastLocation == null) {
+                        Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
+                                , Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     LatLng currentPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                     //LatLng currentPosition = googleMap.getCameraPosition().target;
                     if(fromMarker == null) {
                         MarkerOptions markerOptions = new MarkerOptions()
                                 .position(currentPosition)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                .draggable(true);
+                                //.draggable(true);
                         ;
                         fromMarker = googleMap.addMarker(markerOptions);
                     } else {
@@ -1365,7 +1412,7 @@ public class GpsMainActivity extends GenericViewFragment
                         }
                     });*/
                 }
-
+                pickdropState = 1;
                 btnPickDrop.setText(getString(R.string.gpsMainBtnDropto));
 
                 break;
@@ -1378,7 +1425,8 @@ public class GpsMainActivity extends GenericViewFragment
                         MarkerOptions markerOptions = new MarkerOptions()
                                 .position(currentPosition)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                                .draggable(true);
+                                //.draggable(true)
+                        ;
                         toMarker = googleMap.addMarker(markerOptions);
                     } else {
                         toMarker.setPosition(currentPosition);

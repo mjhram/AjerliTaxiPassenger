@@ -381,16 +381,24 @@ public class UploadClass {
                         drvLat = new double[drvCount];
                         drvLong = new double[drvCount];
 
+                        DriverInfo[] drvInfo = new DriverInfo[drvCount];
                         for(int i=0;i<drvCount;i++){
+                            DriverInfo tmpDrvInfo = new DriverInfo();
+
                             JSONObject c = requests.getJSONObject(i);
-                            drvLat[i] = c.getDouble("lat");
-                            drvLong[i] = c.getDouble("long");
+                            tmpDrvInfo.driverId = c.getInt("drvId");
+                            tmpDrvInfo.name = c.getString("name");
+                            tmpDrvInfo.phone = c.getString("phone");
+                            tmpDrvInfo.imageId = c.getInt("imageId");
+                            tmpDrvInfo.latitude = c.getDouble("lat");
+                            tmpDrvInfo.longitude = c.getDouble("long");
+                            drvInfo[i] = tmpDrvInfo;
                         }
                         hideDialog();
                         double lng_d = jObj.getDouble("lng_d");
                         double lat_d = jObj.getDouble("lat_d");
 
-                        EventBus.getDefault().post(new ServiceEvents.updateDrivers(drvCount, drvLat, drvLong, lat_d, lng_d, loc));
+                        EventBus.getDefault().post(new ServiceEvents.updateDrivers(drvCount, drvInfo, lat_d, lng_d, loc));
                     } else {
                         Toast.makeText(cx, cx.getString(R.string.str_noDrivers)
                                 , Toast.LENGTH_LONG).show();

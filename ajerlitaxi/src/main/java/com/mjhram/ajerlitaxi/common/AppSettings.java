@@ -104,6 +104,14 @@ public class AppSettings extends Application {
     }
 
 
+    public static boolean isShowHelpOverly(){
+        return prefs.getBoolean(Constants.KEY_IS_ShowHelpOverlay, true);
+    }
+
+    public static void setShowHelpOverly(boolean val) {
+        prefs.edit().putBoolean(Constants.KEY_IS_ShowHelpOverlay, val).apply();
+    }
+
     public static void setLogin(boolean isLoggedIn, String name, String email, String uid) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(Constants.KEY_IS_LOGGEDIN, isLoggedIn);
@@ -129,6 +137,7 @@ public class AppSettings extends Application {
         editor.putString(Constants.KEY_PHOTO, photo);
         editor.commit();
     }
+
     public static String getPhoto(){
         String tmp = prefs.getString(Constants.KEY_PHOTO, "");
         return tmp;
