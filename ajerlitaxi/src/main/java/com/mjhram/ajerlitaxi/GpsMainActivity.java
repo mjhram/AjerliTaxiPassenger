@@ -262,8 +262,8 @@ public class GpsMainActivity extends GenericViewFragment
 
         );
         googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this, mMarkerInfoHash));
-        int h = Utilities.dpToPx(this, 50);//btnPickDrop.getHeight();
-        map.setPadding(0,0,0,h);
+        //int h = Utilities.dpToPx(this, 50);//btnPickDrop.getHeight();
+        //map.setPadding(0,0,0,h);
         map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {

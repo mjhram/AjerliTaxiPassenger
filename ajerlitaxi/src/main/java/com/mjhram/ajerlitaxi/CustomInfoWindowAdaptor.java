@@ -48,9 +48,9 @@ class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         TextView titleUi = ((TextView) view.findViewById(R.id.markertitle));
         if (title != null) {
             // Spannable string allows us to edit the formatting of the text.
-            SpannableString titleText = new SpannableString(title);
+            SpannableString titleText = new SpannableString("\u200e"+title);
             titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
-            titleUi.setText("\u200e"+titleText);
+            titleUi.setText(titleText);
         } else {
             titleUi.setText("");
         }
