@@ -262,6 +262,20 @@ public class GpsMainActivity extends GenericViewFragment
 
         );
         googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this, mMarkerInfoHash));
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                DriverInfo tmpDrvInfo = mMarkerInfoHash.get(marker);
+                if(tmpDrvInfo != null && tmpDrvInfo != null && !(tmpDrvInfo.phone.isEmpty())) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+
+                    intent.setData(Uri.parse("tel:" + tmpDrvInfo.phone));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(GpsMainActivity.this, GpsMainActivity.this.getString(R.string.str_noPhone), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         //int h = Utilities.dpToPx(this, 50);//btnPickDrop.getHeight();
         //map.setPadding(0,0,0,h);
         map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {

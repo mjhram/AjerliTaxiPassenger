@@ -7,9 +7,13 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.DriverInfo;
+import com.mjhram.ajerlitaxi.helper.Constants;
+import com.mjhram.ajerlitaxi.views.component.MarkerNetworkImageView;
 
 import java.util.HashMap;
 
@@ -43,7 +47,6 @@ class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             return false;
         }
 
-        //((ImageView) view.findViewById(R.id.idDrvImage)).setImageResource(badge);
         String title = marker.getTitle();
         TextView titleUi = ((TextView) view.findViewById(R.id.markertitle));
         if (title != null) {
@@ -55,15 +58,31 @@ class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             titleUi.setText("");
         }
 
-        String snippet = drvInfo.phone;//marker.getSnippet();
         TextView snippetUi = ((TextView) view.findViewById(R.id.markersnippet));
-        if (snippet != null && snippet.length() > 0) {
-            SpannableString snippetText = new SpannableString(snippet);
+        String snippet = view.getContext().getString(R.string.str_callDriver);//drvInfo.phone;//marker.getSnippet();
+        //if (snippet != null && snippet.length() > 0)
+        if(drvInfo.phone != null && !(drvInfo.phone.isEmpty()))
+        {
+            snippetUi.setVisibility(View.VISIBLE);
+            SpannableString snippetText = new SpannableString("\u200e"+snippet);
             //snippetText.setSpan(new ForegroundColorSpan(Color.MAGENTA), 0, 10, 0);
-            snippetText.setSpan(new ForegroundColorSpan(Color.BLUE), 0, snippet.length(), 0);
+            snippetText.setSpan(new ForegroundColorSpan(Color.BLUE), 0, snippetText.length(), 0);
             snippetUi.setText(snippetText);
-        } else {
+        }
+        else {
+            snippetUi.setVisibility(View.GONE);
             snippetUi.setText("");
+        }
+        //image:
+        MarkerNetworkImageView markerNwIv = ((MarkerNetworkImageView) view.findViewById(R.id.idInfoWndDrvImage));
+        if(drvInfo.imageId == 0) {
+            markerNwIv.setVisibility(View.GONE);
+        } else {
+            markerNwIv.setVisibility(View.VISIBLE);
+            markerNwIv.setDefaultImageResId(R.drawable.portraitplaceholder);
+                //final String IMAGE_URL = "http://developer.android.com/images/training/system-ui.png";
+                ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
+                markerNwIv.setMarkerAndImageUrl(marker, Constants.URL_downloadUserPhoto + drvInfo.imageId, mImageLoader);
         }
         return true;
     }

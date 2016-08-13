@@ -55,5 +55,7 @@
     <string name="str_default">Default</string>
     <string name="str_noDrivers">No nearby drivers for now</string>
     <string name="str_noLocation">No fixed position</string>
+    <string name="str_callDriver">Click to call driver</string>
+    <string name="str_noPhone">No phone to call</string>
 
 </resources>
