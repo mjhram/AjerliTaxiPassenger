@@ -16,6 +16,8 @@
 
     <string name="dlgFee">الاجرة</string>
     <string name="dlgFeeEx">مثلا: 5,000 دينار</string>
+    <string name="dlgPhone">رقم الموبايل</string>
+    <string name="dlgPhoneEx">مثلا: 07787654321</string>
     <string name="dlgNoOfPassengers">عدد الركاب</string>
     <string name="dlgAdditionalCarry">حمولة اوملاحضات اضافية</string>
     <string name="dlgAdditionalCarryEx">مثلا: 3 حقائب متوسطة الحجم</string>

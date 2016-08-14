@@ -148,7 +148,7 @@ public class GpsMainActivity extends GenericViewFragment
     private TextView textviewAds;
     private  RelativeLayout helpOverlayLayout;
 
-    public String suggestedFee, noOfPassangers, additionalNotes;
+    public String treqPhone, suggestedFee, noOfPassangers, additionalNotes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1457,14 +1457,15 @@ public class GpsMainActivity extends GenericViewFragment
                         .positiveText(getString(R.string.gpsMainFeeDlgPositive))
                         //.negativeText("Cancel")
                         .callback(new MaterialDialog.ButtonCallback() {
-
-
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
+                                EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
                                 EditText editTextFee = (EditText) dialog.getCustomView().findViewById(R.id.editTextFee);
                                 EditText editTextNoOfPassangers = (EditText) dialog.getCustomView().findViewById(R.id.editTextNoOfPassangers);
                                 EditText editTextAdditionalNotes = (EditText) dialog.getCustomView().findViewById(R.id.editTextAdditionalNotes);
+
+                                treqPhone = editTextPhone.getText().toString();
                                 suggestedFee = editTextFee.getText().toString();
                                 noOfPassangers = editTextNoOfPassangers.getText().toString();
                                 additionalNotes = editTextAdditionalNotes.getText().toString();
@@ -1479,12 +1480,18 @@ public class GpsMainActivity extends GenericViewFragment
                                 String long2 = Double.toString(toMarker.getPosition().longitude);
                                 upload.addTRequest(AppSettings.getUid(), AppSettings.getEmail(),lat1, long1,
                                         lat2,long2,
-                                        suggestedFee, noOfPassangers, additionalNotes);
+                                        treqPhone, suggestedFee, noOfPassangers, additionalNotes);
                                 //setAdditionalFee(suggestedFee, noOfPassangers, additionalNotes);
                                 //dialog.dismiss();
                             }
                         })
-                        .show();
+                        .build();
+                EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
+                String usrPhone = AppSettings.getPhone();
+                if(usrPhone!=null && !usrPhone.isEmpty()) {
+                    editTextPhone.setText(usrPhone);
+                }
+                dialog.show();
                 break;
             case 3:
                 cancelTRequest(Constants.TRequest_Canceled);

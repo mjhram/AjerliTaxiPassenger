@@ -247,6 +247,18 @@
                     android:layout_below="@+id/ivHelpMyLocationBtn"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
+                <ImageView
+                    android:id="@+id/ivHelpAnywhere"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:clickable="false"
+                    android:paddingRight="50dp"
+                    android:paddingEnd="50dp"
+                    android:scaleType="centerInside"
+                    android:layout_centerInParent="true"
+                    android:paddingBottom="50dp"
+                    android:src="@drawable/helpanywhere"
+                    />
             </RelativeLayout>
        </FrameLayout>
     </RelativeLayout>
