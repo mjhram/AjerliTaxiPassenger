@@ -172,7 +172,7 @@ public class GpsMainActivity extends GenericViewFragment
         helpOverlayLayout.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                helpOverlayLayout.setVisibility(View.GONE);
+                //helpOverlayLayout.setVisibility(View.GONE);
                 return false;
             }
         });
@@ -288,7 +288,7 @@ public class GpsMainActivity extends GenericViewFragment
                             , Toast.LENGTH_LONG).show();
                     helpOverlayLayout.setVisibility(View.VISIBLE);
                 } else {
-                    helpOverlayLayout.setVisibility(View.GONE);
+                    //helpOverlayLayout.setVisibility(View.GONE);
                 }
                 return false;
             }
@@ -1390,6 +1390,9 @@ public class GpsMainActivity extends GenericViewFragment
         }
     }
 
+    public void onCloseHelpClicked(View v) {
+        helpOverlayLayout.setVisibility(View.GONE);
+    }
     public void onPickDropClick(View v) {
         UploadClass uc;
         switch(pickdropState) {

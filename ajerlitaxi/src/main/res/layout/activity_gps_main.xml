@@ -24,8 +24,9 @@
             app:contentInsetStart="72dp">
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                             android:orientation="horizontal"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                >
                 <ImageButton
                     android:id="@+id/imgHelp"
                     android:layout_alignParentRight="true"
@@ -57,6 +58,16 @@
                     android:visibility="invisible"
                     android:indeterminateOnly="true"
                     android:layout_toLeftOf="@id/notification_bulb"/>
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/img_toolbarlogo"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ajerlitxt"
+                    android:paddingRight="72dp"
+                    />
 
             </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -64,14 +75,16 @@
              space available using match_parent in both dimensions. -->
        <FrameLayout
            android:layout_width="match_parent"
-           android:layout_height="match_parent">
+           android:layout_height="match_parent"
+           android:layout_below="@+id/toolbar"
+           android:layout_above="@+id/btnPickDrop"
+           >
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:custom="http://schemas.android.com/apk/res-auto"
                 xmlns:ndroid="http://schemas.android.com/tools"
-                ndroid:paddingTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/toolbar">
+                >
                 <fragment
                     android:id="@+id/location_map"
                     android:layout_width="match_parent"
@@ -80,19 +93,7 @@
                     android:layout_alignParentBottom="true"
                     />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btnPickFrom"
-                    android:id="@+id/btnPickDrop"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:textSize="22dp"
-                    android:onClick="onPickDropClick"
-                    android:layout_alignParentBottom="true"
-                    android:alpha=".7" />
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -222,6 +223,7 @@
                 android:layout_height="match_parent"
                 android:background="#88666666"
                 android:id="@+id/helpoverly_layout"
+                android:visibility="visible"
                 >
                 <ImageView
                     android:id="@+id/ivHelpMyLocationBtn"
@@ -248,19 +250,43 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
                 <ImageView
+                    android:id="@+id/ivHelpClose"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/ivHelpNavDrawer"
+                    android:clickable="true"
+                    android:layout_marginTop="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/helpclose"
+                    android:onClick="onCloseHelpClicked"/>
+                <ImageView
                     android:id="@+id/ivHelpAnywhere"
                     android:layout_width="200dp"
-                    android:layout_height="100dp"
+                    android:layout_height="50dp"
                     android:clickable="false"
-                    android:paddingRight="50dp"
-                    android:paddingEnd="50dp"
                     android:scaleType="centerInside"
-                    android:layout_centerInParent="true"
-                    android:paddingBottom="50dp"
                     android:src="@drawable/helpanywhere"
-                    />
+                    android:layout_below="@+id/ivHelpClose"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="50dp" />
             </RelativeLayout>
        </FrameLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnPickFrom"
+            android:id="@+id/btnPickDrop"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:onClick="onPickDropClick"
+            android:layout_alignParentBottom="true"
+            android:alpha=".7"
+            android:background="@color/ajerliColor"/>
     </RelativeLayout>
 
 
