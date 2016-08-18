@@ -286,7 +286,8 @@
             android:onClick="onPickDropClick"
             android:layout_alignParentBottom="true"
             android:alpha=".7"
-            android:background="@color/ajerliColor"/>
+            android:background="@color/ajerliColor"
+            />
     </RelativeLayout>
 
 

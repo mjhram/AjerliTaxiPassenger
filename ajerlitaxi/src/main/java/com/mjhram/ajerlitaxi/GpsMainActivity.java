@@ -28,6 +28,7 @@ import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -234,6 +235,7 @@ public class GpsMainActivity extends GenericViewFragment
             AppSettings.shouldUploadRegId = false;
             updateRegId(AppSettings.getUid(), AppSettings.regId);
         }
+        checkGpsEnabled();
         UploadClass uc = new UploadClass(this);
         uc.getPassangerState(AppSettings.getUid());
     }
@@ -1195,6 +1197,16 @@ public class GpsMainActivity extends GenericViewFragment
             }
         }
     }*/
+
+    private void checkGpsEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+
+        } else {
+            EventBus.getDefault().post(new ServiceEvents.LocationServicesUnavailable());
+        }
+    }
 
     @Override
     public void onLocationChanged(Location location) {

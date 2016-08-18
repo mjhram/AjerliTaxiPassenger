@@ -60,4 +60,8 @@
     <string name="str_callDriver">Click to call driver</string>
     <string name="str_noPhone">No phone to call</string>
 
+    <string name="profileHintName">ex: abc</string>
+    <string name="profileHintPhone">ex: 0771234567</string>
+    <string name="profilePhoneVerify">Verify...</string>
+    <string name="profileHintEmail">ex: abc@email.com</string>
 </resources>
