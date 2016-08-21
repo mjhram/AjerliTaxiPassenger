@@ -32,6 +32,7 @@ public interface Constants {
     String UPDATE_REQ = "updateRequest";
 	String KEY_IS_ShowHelpOverlay = "isShowHelpOverlay";
 
+	String URL_REGISTER = Constants.SERVER_URL + "/login_register.php";
 	String URL_ads = SERVER_URL+"/images/";
 	String TRequest_Expired = "expired";
 	String TRequest_Canceled = "canceled";

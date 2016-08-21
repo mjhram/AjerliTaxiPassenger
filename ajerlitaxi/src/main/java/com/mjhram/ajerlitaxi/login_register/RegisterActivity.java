@@ -25,8 +25,6 @@ import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.phpErrorMessages;
-import com.mjhram.ajerlitaxi.login_register.app.AppConfig;
-import com.mjhram.ajerlitaxi.login_register.helper.SQLiteHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +42,7 @@ public class RegisterActivity extends Activity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
     //private SessionManager session;
-    private SQLiteHandler db;
+    //private SQLiteHandler db;
     private phpErrorMessages phpErrorMsgs;
 
     @Override
@@ -64,7 +62,7 @@ public class RegisterActivity extends Activity {
         // Session manager
         //session = new SessionManager(getApplicationContext());
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        //db = new SQLiteHandler(getApplicationContext());
         // Check if user is already logged in or not
         if (AppSettings.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -122,7 +120,7 @@ public class RegisterActivity extends Activity {
         showDialog();
 
         StringRequest strReq = new StringRequest(Method.POST,
-                AppConfig.URL_REGISTER, new Response.Listener<String>() {
+                Constants.URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -145,7 +143,7 @@ public class RegisterActivity extends Activity {
                         String created_at = user.getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, userPhone, uid, created_at);
+                        //db.addUser(name, email, userPhone, uid, created_at);
 
                         AppSettings.setLogin(true,name, email, uid);
                         //AppSettings.setPhotoId(imageId);

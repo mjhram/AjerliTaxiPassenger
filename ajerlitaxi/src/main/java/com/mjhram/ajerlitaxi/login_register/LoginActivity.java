@@ -34,7 +34,6 @@ import com.mjhram.ajerlitaxi.common.Utilities;
 import com.mjhram.ajerlitaxi.gcm_client.RegistrationIntentService;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.phpErrorMessages;
-import com.mjhram.ajerlitaxi.login_register.app.AppConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,7 +173,7 @@ public class LoginActivity extends Activity {
      showDialog();
 
      StringRequest strReq = new StringRequest(Method.POST,
-        AppConfig.URL_REGISTER, new Response.Listener<String>() {
+        Constants.URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -236,8 +235,9 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e(TAG, "Login Error: " + error.getMessage());
+                    String tmp = error.getMessage();
                     Toast.makeText(getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_LONG).show();
+                            tmp, Toast.LENGTH_LONG).show();
                     hideDialog();
                 }
             }) {
@@ -250,6 +250,7 @@ public class LoginActivity extends Activity {
                 params.put("name", name);
                 params.put("password", password);
                 params.put("regId", AppSettings.regId);
+                params.put("type", "Pas");
                 return params;
             }
 
