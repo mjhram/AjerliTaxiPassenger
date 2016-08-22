@@ -5,6 +5,7 @@ public interface Constants {
     /**
      * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
      */
+	String ver = "2016Aug22"; //versioning used to force update
 
 	String SERVER_URL = "http://www.ajerlitaxi.com";
 

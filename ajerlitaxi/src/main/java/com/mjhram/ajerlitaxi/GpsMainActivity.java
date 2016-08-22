@@ -980,6 +980,7 @@ public class GpsMainActivity extends GenericViewFragment
 
     @EventBusHook
     public void onEventMainThread(ServiceEvents.UpdateAnnouncement updateAnnEvent){
+        String ver = updateAnnEvent.ver;
         String imageName = updateAnnEvent.annImage;
         String tmpText = updateAnnEvent.annText;
         String countDrv = updateAnnEvent.countOfDrivers;
@@ -1011,6 +1012,25 @@ public class GpsMainActivity extends GenericViewFragment
                     textviewAds.setText(s);
                 }
             }
+        }
+        if(ver.equalsIgnoreCase(Constants.ver) == false) {
+            // request for update => exit app
+            new MaterialDialog.Builder(this)
+                    .cancelable(false)
+                    .autoDismiss(false)
+                    .title("UPDATE")
+                    .content("Please update your app")
+                    .positiveText(R.string.ok)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            dialog.dismiss();
+                            finish();
+                            return;
+                        }
+                    })
+                    .show();
+            //finish();
         }
     }
 

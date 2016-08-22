@@ -135,13 +135,14 @@ public class UploadClass {
                         }
 
                         String tmpAnn = jObj.getString("announcements");
-                        String annImage = "", annText="";
+                        String annImage = "", annText="", ver="";
                         if(!tmpAnn.equalsIgnoreCase("{}")){
                             JSONObject anns = new JSONObject(tmpAnn);
                             annImage = anns.getString("annimage");
                             annText = anns.getString("anntext");
+                            ver = anns.getString("ver");
                         }
-                        EventBus.getDefault().post(new ServiceEvents.UpdateAnnouncement(annImage, annText, countDrv, countPas));
+                        EventBus.getDefault().post(new ServiceEvents.UpdateAnnouncement(ver, annImage, annText, countDrv, countPas));
 
                         tmp = jObj.getString("requests");
                         if(tmp.equalsIgnoreCase("{}")/*requests.length() == 0*/) {
