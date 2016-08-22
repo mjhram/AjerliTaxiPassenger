@@ -10,6 +10,7 @@
   <string name="btn_register">تسجيل الدخول</string>
   <string name="btn_link_to_register">لست عضوا؟ سجل الآن</string>
   <string name="btn_link_to_login">لديك حساب؟ ادخل الآن</string>
+  <string name="btn_forgot_password">نسيت كلمة السر</string>
 
   <string name="navigation_drawer_open">فتح درج الملاحة</string>
   <string name="navigation_drawer_close">إغلاق درج الملاحة</string>

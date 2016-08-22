@@ -1013,13 +1013,14 @@ public class GpsMainActivity extends GenericViewFragment
                 }
             }
         }
+
         if(ver.equalsIgnoreCase(Constants.ver) == false) {
             // request for update => exit app
             new MaterialDialog.Builder(this)
                     .cancelable(false)
                     .autoDismiss(false)
-                    .title("UPDATE")
-                    .content("Please update your app")
+                    .title(R.string.loginUpdateAppTitle)
+                    .content(getString(R.string.loginUpdateApp))
                     .positiveText(R.string.ok)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override

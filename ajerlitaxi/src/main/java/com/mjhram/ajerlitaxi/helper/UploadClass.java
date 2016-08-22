@@ -6,6 +6,7 @@ import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +34,8 @@ public class UploadClass {
     private Context cx;
     private static final String URL_addTRequest = Constants.SERVER_URL + "/addTRequest.php";
     private static final String URL_getPassangerState = Constants.SERVER_URL + "/getPassangerState.php";
+    private static final String URL_forgotPassword = Constants.SERVER_URL+"/forgotpassword.php?action=password";
+
     private static final String TAG = UploadClass.class.getSimpleName();
     private phpErrorMessages phpErrorMsgs;
 
@@ -42,6 +45,70 @@ public class UploadClass {
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
+    }
+
+    public void forgotPassword(final String email) {
+        // Tag used to cancel the request
+        String tag_string_req = "forgotPass";
+
+        pDialog.setMessage("Please wait...");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                URL_forgotPassword, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Reset Password response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        //reset linke was sent to your
+                        new MaterialDialog.Builder(cx)
+                                .title(R.string.app_name)
+                                .content(cx.getString(R.string.forgotPasswordReset))
+                                .positiveText(R.string.ok)
+                                .show();
+                    } else {
+                        // Error occurred in registration. Get the error
+                        // message
+                        //String errorMsg = jObj.getString("error_msg");
+                        int errorno = jObj.getInt("error_no");
+                        String errorMsg = phpErrorMsgs.msgMap.get(errorno);
+                        if(errorMsg != null) {
+                            Toast.makeText(cx, errorMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Resetting password Failed " + error.getMessage());
+                Toast.makeText(cx,
+                        "Resseting Password Failed. Try again later", Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", "forgotpass");
+                params.put("email", email);
+
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppSettings ac = AppSettings.getInstance();
+        ac.addToRequestQueue(strReq, tag_string_req);
     }
 
     public void updateUserInfo(final String username, final String useremail, final String userphone) {

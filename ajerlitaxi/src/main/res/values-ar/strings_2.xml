@@ -64,4 +64,9 @@
     <string name="profileHintPhone">مثلا: 0771234567</string>
     <string name="profilePhoneVerify">تأكيد...</string>
     <string name="profileHintEmail">مثلا: abc@email.com</string>
+
+    <string name="loginUpdateApp">يرجى تحديث التطبيق</string>
+    <string name="loginUpdateAppTitle">تحديث</string>
+
+    <string name="forgotPasswordReset">تم ارسال رابط تغيير كلمة المرور الى بريدك الالكتروني</string>
 </resources>

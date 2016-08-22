@@ -16,12 +16,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +35,7 @@ import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.Utilities;
 import com.mjhram.ajerlitaxi.gcm_client.RegistrationIntentService;
 import com.mjhram.ajerlitaxi.helper.Constants;
+import com.mjhram.ajerlitaxi.helper.UploadClass;
 import com.mjhram.ajerlitaxi.helper.phpErrorMessages;
 
 import org.json.JSONException;
@@ -300,6 +303,23 @@ public class LoginActivity extends Activity {
         return true;
     }
 
+    public void onForgotClicked(View v) {
+        MaterialDialog alertDialog = new MaterialDialog.Builder(this)
+                .title(getString(R.string.app_name))
+                .content("Enter your email to send you reset link")
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                .input(getString(R.string.hint_email), null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        UploadClass uc = new UploadClass(LoginActivity.this);
+                        String email = input.toString();
+                        uc.forgotPassword(email);
+                    }
+                })
+                .build();
+        alertDialog.show();
+
+    }
     /*private BroadcastReceiver registrationStatusReceiver = new  BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
