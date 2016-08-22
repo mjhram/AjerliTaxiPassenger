@@ -51,7 +51,8 @@
 
     <!-- gcm_client/MyGcmListenerService -->
     <string name="gcmClientReqState">حالة الطلب:</string>
-    <string name="gcmClientGcmMsg">AjerliTaxi Passenger</string>
+    <string name="gcmTReqAccepted">تم قبول طلب التكسي</string>
+    <string name="gcmTReqUpdated">تم تحديث حالة الطلب</string>
 
     <string name="appAbout">AjerliTaxiDriver الاصدار:</string>
     <string name="str_default">افتراضي</string>

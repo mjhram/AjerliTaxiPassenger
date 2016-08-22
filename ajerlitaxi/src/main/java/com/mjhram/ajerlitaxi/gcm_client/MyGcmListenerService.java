@@ -68,23 +68,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 if(tag.equalsIgnoreCase("drvId")) {
                     int drvId = msgObj.getInt("data");//Integer.parseInt(message);
                     EventBus.getDefault().post(new ServiceEvents.TRequestAccepted(drvId));
-                    message = Integer.toString(drvId);
-                    /*Intent intent = new Intent(Constants.UPDATE_REQ);
-                    //put whatever data you want to send, if any
-                    intent.putExtra("drvId", drvId);
-                    //send broadcast
-                    getApplicationContext().sendBroadcast(intent);*/
-                    // normal downstream message.
+                    message = getString(R.string.gcmTReqAccepted); //Integer.toString(drvId);
                 } else if(tag.equalsIgnoreCase("treqState")) {
                     String state = msgObj.getString("data");//Integer.parseInt(message);
                     EventBus.getDefault().post(new ServiceEvents.TRequestUpdated(state));
-                    message = getString(R.string.gcmClientReqState) + state;
-                    /*Intent intent = new Intent(Constants.UPDATE_REQ);
-                    //put whatever data you want to send, if any
-                    intent.putExtra("drvId", drvId);
-                    //send broadcast
-                    getApplicationContext().sendBroadcast(intent);*/
-                    // normal downstream message.
+                    message = getString(R.string.gcmTReqUpdated);//getString(R.string.gcmClientReqState) + state;
                 } else if(tag.equalsIgnoreCase("drvLoc")) {
                     DriverInfo driverInfo = new DriverInfo();
                     driverInfo.driverId = msgObj.getInt("drvId");
@@ -92,6 +80,7 @@ public class MyGcmListenerService extends GcmListenerService {
                     driverInfo.longitude = msgObj.getDouble("lng");
 
                     EventBus.getDefault().post(new ServiceEvents.DriverLocationUpdate(driverInfo));
+                    return;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

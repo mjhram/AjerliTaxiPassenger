@@ -51,6 +51,15 @@ public class Utilities {
     private static MaterialDialog pd;
     private static org.slf4j.Logger tracer = LoggerFactory.getLogger(Utilities.class.getSimpleName());
 
+    public static boolean isNumeric(String str)
+    {
+        for (char c : str.toCharArray())
+        {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
+
     public static int dpToPx(Context cx, int dp) {
         DisplayMetrics displayMetrics = cx.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));

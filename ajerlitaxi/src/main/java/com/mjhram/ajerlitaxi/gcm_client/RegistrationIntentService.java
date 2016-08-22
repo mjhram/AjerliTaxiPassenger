@@ -87,7 +87,9 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         String tmp =AppSettings.getRegId();
-        if(!token.equals(tmp)) {
+        //always send to server
+        // if(!token.equals(tmp))
+        {
             // Add custom implementation, as needed.
             AppSettings.shouldUploadRegId = true;
             AppSettings.setRegId(token);
