@@ -48,7 +48,6 @@ public abstract class GenericViewFragment extends AppCompatActivity /*ActionBarA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RegisterEventBus();
     }
 
     private void RegisterEventBus() {
@@ -65,11 +64,20 @@ public abstract class GenericViewFragment extends AppCompatActivity /*ActionBarA
 
     @Override
     public void onDestroy() {
-        UnregisterEventBus();
         super.onDestroy();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RegisterEventBus();
+    }
 
+    @Override
+    protected void onPause() {
+        UnregisterEventBus();
+        super.onPause();
+    }
 
     @EventBusHook
     public void onEventMainThread(ServiceEvents.LocationServicesUnavailable locationServicesUnavailable){

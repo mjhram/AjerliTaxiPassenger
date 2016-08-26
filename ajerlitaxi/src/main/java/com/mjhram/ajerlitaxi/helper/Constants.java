@@ -62,6 +62,13 @@ public interface Constants {
 	String RequestsNoOfPassangers = "noOfPassangers";
 	String RequestsAdditionalNotes = "additionalNotes";
 
+	String ProfileName = "name";
+	String ProfileEmail = "email";
+	String ProfilePhone = "phone";
+	String ProfileImageId = "image_id";
+	String ProfileLicenseState = "licenseState";
+
+
 	//public static final String ACTION_REGISTER = "com.mjhram.ajerlitaxi.REGISTER";
 	String EXTRA_STATUS = "status";
 	int STATUS_SUCCESS = 1;

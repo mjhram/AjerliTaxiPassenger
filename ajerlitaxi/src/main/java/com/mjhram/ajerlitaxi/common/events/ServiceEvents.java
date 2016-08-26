@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
+import com.mjhram.ajerlitaxi.common.UserInfo;
 
 public class ServiceEvents {
     public static class DriverLocationUpdate {
@@ -15,6 +16,13 @@ public class ServiceEvents {
     }
     public static class ErrorConnectionEvent {
         public ErrorConnectionEvent(){
+        }
+    }
+
+    public static class UpdateProfile {
+        public UserInfo user;
+        public UpdateProfile(UserInfo theUser){
+            user = theUser;
         }
     }
 

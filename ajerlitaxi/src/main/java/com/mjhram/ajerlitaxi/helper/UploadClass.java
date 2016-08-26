@@ -18,6 +18,7 @@ import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
+import com.mjhram.ajerlitaxi.common.UserInfo;
 import com.mjhram.ajerlitaxi.common.Utilities;
 import com.mjhram.ajerlitaxi.common.events.ServiceEvents;
 
@@ -38,6 +39,7 @@ public class UploadClass {
     private Context cx;
     private static final String URL_addTRequest = Constants.SERVER_URL + "/addTRequest.php";
     private static final String URL_getPassangerState = Constants.SERVER_URL + "/getPassangerState.php";
+    private static final String URL_getUserProfile = Constants.SERVER_URL + "/getuser.php";
     private static final String URL_forgotPassword = Constants.SERVER_URL+"/forgotpassword.php?action=password";
 
     private static final String TAG = UploadClass.class.getSimpleName();
@@ -49,6 +51,83 @@ public class UploadClass {
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
+    }
+
+    public void getUserProfile(final String passangerId) {
+        // Tag used to cancel the request
+        String tag_string_req = "updatePassangerState";
+
+        pDialog.setMessage(cx.getString(R.string.uploadDlgMsgUpdatingInfo));
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                URL_getUserProfile, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "getUser Profile Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        String tmp;
+                        tmp = jObj.getString("requests");
+                        if(tmp.equalsIgnoreCase("{}")/*requests.length() == 0*/) {
+                            //idle state: no requests
+                            //EventBus.getDefault().post(new ServiceEvents.UpdateStateEvent(null));
+                        } else {
+                            JSONObject res = new JSONObject(tmp);
+                            //in a task state
+                            // show info: from/to/driver
+                            UserInfo user = new UserInfo();
+                            user.name = res.getString(Constants.ProfileName);
+                            user.email = res.getString(Constants.ProfileEmail);
+                            user.phone = res.getString(Constants.ProfilePhone);
+                            user.image_id = res.getString(Constants.ProfileImageId);
+                            user.licenseState = res.getString(Constants.ProfileLicenseState);
+
+
+                            EventBus.getDefault().post(new ServiceEvents.UpdateProfile(user));
+
+
+                        }
+                    } else {
+                        //AppSettings.requestId = -1;
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");//Error always false
+                        Toast.makeText(cx,
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideDialog();
+                Log.e(TAG, "getUserProfile Error: " + error.getMessage());
+                Toast.makeText(cx,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                //EventBus.getDefault().post(new ServiceEvents.ErrorConnectionEvent());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", "getUserProfile");
+                params.put("passangerId", passangerId);
+                params.put("type", "Pas");
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppSettings ac = AppSettings.getInstance();
+        ac.addToRequestQueue(strReq, tag_string_req);
     }
 
     public void forgotPassword(final String email) {

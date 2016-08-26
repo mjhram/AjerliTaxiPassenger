@@ -18,10 +18,15 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
+import com.mjhram.ajerlitaxi.common.EventBusHook;
+import com.mjhram.ajerlitaxi.common.UserInfo;
+import com.mjhram.ajerlitaxi.common.events.ServiceEvents;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.UploadClass;
 
 import java.io.IOException;
+
+import de.greenrobot.event.EventBus;
 
 public class ProfileActivity extends AppCompatActivity {
     EditText    edit_username, edit_email, edit_phone;
@@ -52,6 +57,20 @@ public class ProfileActivity extends AppCompatActivity {
         tmp = savedInstanceState.getString("PHONE");
         edit_phone.setText(tmp);
     }
+
+    @Override
+    protected void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
             ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
             networkImageViewUser.setImageUrl(Constants.URL_downloadUserPhoto+AppSettings.getPhotoId(), mImageLoader);
         }
+        UploadClass uc = new UploadClass(this);
+        uc.getUserProfile(AppSettings.getUid());
     }
 
 
@@ -154,5 +175,19 @@ public class ProfileActivity extends AppCompatActivity {
             pDialog.dismiss();
     }
 
+    @EventBusHook
+    public void onEventMainThread(ServiceEvents.UpdateProfile updateProfileEvent){
+        UserInfo user = updateProfileEvent.user;
+        edit_username.setText(user.name);
+        edit_email.setText(user.email);
+        edit_phone.setText(user.phone);
+        {
+            ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
+            networkImageViewUser.setImageUrl(Constants.URL_downloadUserPhoto+user.image_id, mImageLoader);
+        }
+        AppSettings.setEmail(user.email);
+        AppSettings.setPhone(user.phone);
+        AppSettings.setName(user.name);
+    }
 
 }
