@@ -53,7 +53,7 @@ public class UploadClass {
 
     }
 
-    public void getUserProfile(final String passangerId) {
+    public void getUserProfile(final String userId) {
         // Tag used to cancel the request
         String tag_string_req = "updatePassangerState";
 
@@ -120,7 +120,7 @@ public class UploadClass {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("tag", "getUserProfile");
-                params.put("passangerId", passangerId);
+                params.put("userId", userId);
                 params.put("type", "Pas");
                 return params;
             }
