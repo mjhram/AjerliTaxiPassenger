@@ -2,6 +2,7 @@ package com.mjhram.ajerlitaxi.helper;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,11 +11,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
+import com.mjhram.ajerlitaxi.common.Utilities;
 import com.mjhram.ajerlitaxi.common.events.ServiceEvents;
 
 import org.json.JSONArray;
@@ -109,6 +113,77 @@ public class UploadClass {
         // Adding request to request queue
         AppSettings ac = AppSettings.getInstance();
         ac.addToRequestQueue(strReq, tag_string_req);
+    }
+
+    public void updateUserPhoto(final Bitmap bitmap, final NetworkImageView networkImageViewUser) {
+        // Tag used to cancel the request
+        final String tag_string = "modifyUserPhoto";
+        final String TAG = tag_string;
+        final ProgressDialog pDialog = new ProgressDialog(cx);
+        pDialog.setCancelable(false);
+
+        pDialog.setMessage(cx.getString(R.string.uploadDlgMsgUpdatingInfo));
+        showDialog();
+
+        final String uploadImage = Utilities.getStringImage(bitmap);
+        AppSettings.setPhoto(uploadImage);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Constants.URL_uploadImage, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "updatePhoto Response: " + response);
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        String newId = jObj.getString("newid");
+                        AppSettings.setPhotoId(newId);
+                        {
+                            //final String IMAGE_URL = "http://developer.android.com/images/training/system-ui.png";
+                            ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
+                            networkImageViewUser.setImageUrl(Constants.URL_downloadUserPhoto+newId, mImageLoader);
+                        }
+                        //photoImageView.setImageBitmap(bitmap);
+                    } else {
+                        // Error occurred in registration. Get the error
+                        // message
+                        //String errorMsg = jObj.getString("error_msg");
+                        int errorno = jObj.getInt("error_no");
+                        phpErrorMessages phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
+                        String errorMsg = phpErrorMsgs.msgMap.get(errorno);
+                        Toast.makeText(cx,
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "update User Info Error: " + error.getMessage());
+                Toast.makeText(cx,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", tag_string);
+                params.put("image", uploadImage);
+                params.put("uid", AppSettings.getUid());
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppSettings ac = AppSettings.getInstance();
+        ac.addToRequestQueue(strReq, tag_string);
     }
 
     public void updateUserInfo(final String username, final String useremail, final String userphone) {

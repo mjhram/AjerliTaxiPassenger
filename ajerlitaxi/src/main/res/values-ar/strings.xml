@@ -18,6 +18,7 @@
   <string name="settings_screen_name">الإعدادات</string>
   <string name="ok">موافق</string>
   <string name="cancel">إلغاء الأمر</string>
+  <string name="menu_about">حول التطبيق</string>
   <string name="menu_exit">خروج</string>
   <string name="unknown_direction">مجهول</string>
   <string name="direction_roughly">ما يقرب من %s</string>
@@ -51,6 +52,7 @@
   <string name="settings_enter_meters">أدخل متر (أقصى 9999)</string>
   <string name="new_file_custom_title">تخصيص اسم ملف</string>
   <string name="pref_performance_title">الأداء</string>
+  <string name="pref_performance_summary">المؤشرات والتوقيتات</string>
   <string name="time_before_logging_title">الوقت قبل تسجيل الدخول</string>
   <string name="time_before_logging_dialog_title">الوقت بالثانية</string>
   <string name="time_before_logging_hint">أدخل ثواني (الاقصى 9999)</string>

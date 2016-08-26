@@ -21,12 +21,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,6 +37,7 @@ import com.mjhram.ajerlitaxi.R;
 
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
@@ -50,6 +53,42 @@ public class Utilities {
 
     private static MaterialDialog pd;
     private static org.slf4j.Logger tracer = LoggerFactory.getLogger(Utilities.class.getSimpleName());
+
+    public static String getStringImage(Bitmap bmp){
+        bmp = resizeImage(bmp);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    private static Bitmap resizeImage(Bitmap bitmap) {
+        int fixWidth=200, fixHeight=200;
+        float h2wRatio = 1.0F*fixHeight/fixWidth;
+        Bitmap resizedBitmap = null;
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        int newWidth = -1;
+        int newHeight = -1;
+        float multFactor = -1.0F;
+        float h2wRatioOrg = 1.0F*originalHeight/originalWidth;
+        if (h2wRatioOrg == h2wRatio) {
+            newHeight = fixHeight;
+            newWidth = fixWidth;
+        } if (h2wRatioOrg > h2wRatio) {
+            newHeight = fixHeight;
+            multFactor = (float) originalWidth / (float) originalHeight;
+            newWidth = (int) (newHeight * multFactor);
+        } else if (h2wRatioOrg < h2wRatio) {
+            newWidth = fixWidth;
+            multFactor = (float) originalHeight / (float) originalWidth;
+            newHeight = (int) (newWidth * multFactor);
+        }
+        resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+        return resizedBitmap;
+    }
 
     public static boolean isNumeric(String str)
     {
