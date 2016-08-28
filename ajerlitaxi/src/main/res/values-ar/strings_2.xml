@@ -70,4 +70,10 @@
     <string name="loginUpdateAppTitle">تحديث</string>
 
     <string name="forgotPasswordReset">تم ارسال رابط تغيير كلمة المرور الى بريدك الالكتروني</string>
+    <string name="forgotEnterEmail">ادخل بريدك الالكتروني ليتم ارسال رابط تغيير كلمة المررور اليه</string>
+    <string name="fromDesc">اذكر وصف نقطة الانطلاق</string>
+    <string name="fromDescHint">مثلا زيونة-دار الازياء</string>
+    <string name="toDesc">ادخل وصف نقطة الوصول</string>
+    <string name="toDescHint">مثلا شارع فلسطين-مول النخيل</string>
+
 </resources>

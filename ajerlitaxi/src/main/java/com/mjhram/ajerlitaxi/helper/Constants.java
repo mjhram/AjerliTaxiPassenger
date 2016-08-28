@@ -5,7 +5,7 @@ public interface Constants {
     /**
      * Base URL of the Demo Server (such as http://my_host:8080/gcm-demo)
      */
-	String ver = "2016Aug22"; //versioning used to force update
+	String ver = "2016Aug28"; //versioning used to force update
 
 	String SERVER_URL = "http://www.ajerlitaxi.com";
 
@@ -49,6 +49,8 @@ public interface Constants {
 	String RequestsFromLat = "fromLat";
 	String RequestsFromLong = "fromLong";
 	String RequestsToLat = "toLat";
+	String RequestsFromDesc = "fromDesc";
+	String RequestsToDesc = "toDesc";
 	String RequestsToLong = "toLong";
 	String RequestsDriverId = "driverId";
 	String RequestsStatus = "status";

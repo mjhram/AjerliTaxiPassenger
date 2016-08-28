@@ -71,5 +71,10 @@
     <string name="loginUpdateAppTitle">UPDATE</string>
 
     <string name="forgotPasswordReset">Your password reset link was sent to your e-mail address</string>
+    <string name="forgotEnterEmail">Enter your email to send you reset link</string>
+    <string name="fromDesc">Enter Pickup Point Description</string>
+    <string name="fromDescHint">Ex. Zayouna-Fashion House</string>
+    <string name="toDesc">Enter Drop Point Description</string>
+    <string name="toDescHint">Ex. Palastine Street-Mall Al-Nakheel</string>
 
 </resources>

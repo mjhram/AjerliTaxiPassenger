@@ -13,6 +13,7 @@ public class TRequestObj {
     public String passangerName;
     public String passanger_id;
     public double fromLat, fromLong, toLat, toLong;
+    public String fromDesc, toDesc;
     public String status;
     public String time;
     public String secondsToNow;

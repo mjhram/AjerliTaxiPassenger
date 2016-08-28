@@ -382,6 +382,9 @@ public class UploadClass {
                             treq.fromLong = c.getDouble(Constants.RequestsFromLong);
                             treq.toLat = c.getDouble(Constants.RequestsToLat);
                             treq.toLong = c.getDouble(Constants.RequestsToLong);
+                            treq.fromDesc = c.getString(Constants.RequestsFromDesc);
+                            treq.toDesc = c.getString(Constants.RequestsToDesc);
+
                             treq.driverId = c.getString(Constants.RequestsDriverId);
                             treq.status = c.getString(Constants.RequestsStatus);
                             treq.time = c.getString(Constants.RequestsTime);
@@ -503,6 +506,7 @@ public class UploadClass {
 
     public void addTRequest(final String passangerId, final String email,
                             final String lat1, final String long1, final String lat2, final String long2,
+                            final String fromDescription, final String toDescription,
                             final String treqPhone, final String suggestedFee, final String noOfPassangers, final String additionalNotes)
     {
         // Tag used to cancel the request
@@ -564,6 +568,8 @@ public class UploadClass {
                 params.put("long", long1);
                 params.put("lat2", lat2);
                 params.put("long2", long2);
+                params.put("fromDesc", fromDescription);
+                params.put("toDesc", toDescription);
                 params.put("treqPhone", treqPhone);
                 params.put("suggestedFee", suggestedFee);
                 params.put("noOfPassangers", noOfPassangers);

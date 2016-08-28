@@ -306,7 +306,7 @@ public class LoginActivity extends Activity {
     public void onForgotClicked(View v) {
         MaterialDialog alertDialog = new MaterialDialog.Builder(this)
                 .title(getString(R.string.app_name))
-                .content("Enter your email to send you reset link")
+                .content(getString(R.string.forgotEnterEmail))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
                 .input(getString(R.string.hint_email), null, new MaterialDialog.InputCallback() {
                     @Override

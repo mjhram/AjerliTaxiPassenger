@@ -42,6 +42,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -135,6 +136,7 @@ public class GpsMainActivity extends GenericViewFragment
     private GoogleApiClient mGoogleApiClient;
     //private GoogleMap map;
     private Marker fromMarker, toMarker, driverMarker;
+    private String fromDesc, toDesc;
     private CountDownTimer countDownTimer;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private RelativeLayout driverInfoLayout;
@@ -1462,6 +1464,20 @@ public class GpsMainActivity extends GenericViewFragment
                         }
                     });*/
                 }
+                {
+                    MaterialDialog alertDialog = new MaterialDialog.Builder(this)
+                            .title(getString(R.string.app_name))
+                            .content(getString(R.string.fromDesc))
+                            .inputType(InputType.TYPE_CLASS_TEXT)
+                            .input(getString(R.string.fromDescHint), null, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                    fromDesc = input.toString();
+                                }
+                            })
+                            .build();
+                    alertDialog.show();
+                }
                 pickdropState = 1;
                 btnPickDrop.setText(getString(R.string.gpsMainBtnDropto));
 
@@ -1481,6 +1497,20 @@ public class GpsMainActivity extends GenericViewFragment
                     } else {
                         toMarker.setPosition(currentPosition);
                     }
+                }
+                {
+                    MaterialDialog alertDialog = new MaterialDialog.Builder(this)
+                            .title(getString(R.string.app_name))
+                            .content(getString(R.string.toDesc))
+                            .inputType(InputType.TYPE_CLASS_TEXT)
+                            .input(getString(R.string.toDescHint), null, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                    toDesc = input.toString();
+                                }
+                            })
+                            .build();
+                    alertDialog.show();
                 }
                 btnPickDrop.setText(getString(R.string.gpsMainBtnConfirm));
                 break;
@@ -1516,6 +1546,7 @@ public class GpsMainActivity extends GenericViewFragment
                                 String long2 = Double.toString(toMarker.getPosition().longitude);
                                 upload.addTRequest(AppSettings.getUid(), AppSettings.getEmail(),lat1, long1,
                                         lat2,long2,
+                                        fromDesc, toDesc,
                                         treqPhone, suggestedFee, noOfPassangers, additionalNotes);
                                 //setAdditionalFee(suggestedFee, noOfPassangers, additionalNotes);
                                 //dialog.dismiss();
