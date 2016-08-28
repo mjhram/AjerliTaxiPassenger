@@ -910,6 +910,12 @@ public class GpsMainActivity extends GenericViewFragment
     }
 
     @EventBusHook
+    public void onEventMainThread(ServiceEvents.GetPassengerStateEvent tmp){
+        UploadClass uc = new UploadClass(GpsMainActivity.this);
+        uc.getPassangerState(AppSettings.getUid());
+    }
+
+    @EventBusHook
     public void onEventMainThread(ServiceEvents.updateDrivers updateDriversEvent){
         tracer.debug("updating nearby driver");
         DriverInfo[] driverInfo = updateDriversEvent.drvInfo;

@@ -534,11 +534,15 @@ public class UploadClass {
                         // message
                         //String errorMsg = jObj.getString("error_msg");
                         int errorno = jObj.getInt("error_no");
-                        String errorMsg = phpErrorMsgs.msgMap.get(errorno);
-                        //Toast.makeText(cx,
-                                //errorMsg, Toast.LENGTH_LONG).show();
-                        hideDialog();
-                        EventBus.getDefault().post(new ServiceEvents.CancelTRequests(errorMsg));
+                        if(errorno==11) {
+                            EventBus.getDefault().post(new ServiceEvents.GetPassengerStateEvent());
+                        } else {
+                            String errorMsg = phpErrorMsgs.msgMap.get(errorno);
+                            //Toast.makeText(cx,
+                            //errorMsg, Toast.LENGTH_LONG).show();
+                            hideDialog();
+                            EventBus.getDefault().post(new ServiceEvents.CancelTRequests(errorMsg));
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

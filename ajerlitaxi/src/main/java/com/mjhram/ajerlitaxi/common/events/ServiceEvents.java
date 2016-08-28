@@ -19,6 +19,12 @@ public class ServiceEvents {
         }
     }
 
+    public static class GetPassengerStateEvent {
+        public GetPassengerStateEvent(){
+
+        }
+    }
+
     public static class UpdateProfile {
         public UserInfo user;
         public UpdateProfile(UserInfo theUser){
