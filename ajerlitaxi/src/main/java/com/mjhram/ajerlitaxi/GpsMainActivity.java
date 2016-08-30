@@ -1008,7 +1008,7 @@ public class GpsMainActivity extends GenericViewFragment
             relativeLayoutAds.setVisibility(View.GONE);
         } else {
             if(imageName.isEmpty()) {
-                networkivAds.setVisibility(View.INVISIBLE);
+                networkivAds.setVisibility(View.GONE);
             } else {
                 //networkivAds = (NetworkImageView) findViewById(R.id.networkivAds);
                 networkivAds.setVisibility(View.VISIBLE);
