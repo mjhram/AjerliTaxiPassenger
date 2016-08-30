@@ -15,6 +15,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.mjhram.ajerlitaxi.R;
+import com.mjhram.ajerlitaxi.RideHistoryActivity;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
@@ -51,6 +52,89 @@ public class UploadClass {
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
+    }
+
+    public void uploadFeedback(final int idx, final String feedback) {
+        // Tag used to cancel the request
+        String tag_string_req = "uploadFeeback";
+
+        pDialog.setMessage(cx.getString(R.string.uploadDlgMsgUpdatingRqst));
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Constants.URL_uploadFeedback, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "uploadFeedback Response: " + response);
+                hideDialog();
+                //rideHistoryActivity.showList(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "uploadFeedback Error: " + error.getMessage());
+                Toast.makeText(cx,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", "uploadFeedback");
+                params.put("idx", Integer.toString(idx));
+                params.put("rate", "5");
+                params.put("feedback", feedback);
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppSettings ac = AppSettings.getInstance();
+        ac.addToRequestQueue(strReq, tag_string_req);
+    }
+
+    public void getRideHistory(final RideHistoryActivity rideHistoryActivity) {
+        // Tag used to cancel the request
+        String tag_string_req = "getRideHsitory";
+
+        pDialog.setMessage(cx.getString(R.string.uploadDlgMsgUpdatingRqst));
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Constants.URL_getRideHistory, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "getDrivers Response: " + response);
+                hideDialog();
+
+                rideHistoryActivity.showList(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "getRideHistory Error: " + error.getMessage());
+                Toast.makeText(cx,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", "getRideHistory");
+                params.put("userId", AppSettings.getUid());
+                return params;
+            }
+        };
+        // Adding request to request queue
+        AppSettings ac = AppSettings.getInstance();
+        ac.addToRequestQueue(strReq, tag_string_req);
     }
 
     public void getUserProfile(final String userId) {

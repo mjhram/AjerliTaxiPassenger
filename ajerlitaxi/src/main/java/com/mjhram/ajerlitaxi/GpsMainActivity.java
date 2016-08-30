@@ -545,6 +545,12 @@ public class GpsMainActivity extends GenericViewFragment
         );
 
         drawer.addItem(new DrawerItem()
+                .setId(3)
+                .setImage(ContextCompat.getDrawable(this, R.drawable.history))
+                .setTextPrimary(getString(R.string.menu_rideHistory)));
+
+
+        drawer.addItem(new DrawerItem()
                         .setId(2)
                         .setImage(ContextCompat.getDrawable(this, R.drawable.performance))
                         .setTextPrimary(getString(R.string.pref_performance_title))
@@ -586,6 +592,10 @@ public class GpsMainActivity extends GenericViewFragment
 
                     case 2:
                         LaunchPreferenceScreen(MainPreferenceActivity.PreferenceConstants.PERFORMANCE);
+                        break;
+                    case 3:
+                        Intent aActivity = new Intent(getApplicationContext(), RideHistoryActivity.class);
+                        startActivity(aActivity);
                         break;
 
                     case 11:

@@ -20,5 +20,7 @@ public class TRequestObj {
     public String suggestedFee;
     public String noOfPassangers;
     public String additionalNotes;
+    public String feedbackId;
+    public String feedback;
 
 }

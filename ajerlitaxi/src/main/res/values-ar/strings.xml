@@ -18,6 +18,7 @@
   <string name="settings_screen_name">الإعدادات</string>
   <string name="ok">موافق</string>
   <string name="cancel">إلغاء الأمر</string>
+  <string name="menu_rideHistory">سجل الطلبات...</string>
   <string name="menu_about">حول التطبيق</string>
   <string name="menu_exit">خروج</string>
   <string name="unknown_direction">مجهول</string>

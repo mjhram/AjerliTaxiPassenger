@@ -40,6 +40,7 @@
     <!-- login_register/RegisterActivity -->
     <string name="loginMsgEnterDetails">Please enter your details!</string>
     <string name="loginDlgMsgRegistering">Registering ...</string>
+    <string name="loginDlgMsgEnterEmail">Enter your email to send you reset link</string>
 
     <!-- helper/UploadClass -->
     <string name="uploadDlgMsgUpdating">Updating State ...</string>
@@ -62,6 +63,17 @@
     <string name="str_callDriver">Click to call driver</string>
     <string name="str_noPhone">No phone to call</string>
 
+    <string name="infoName">Name:</string>
+    <string name="infoTime">Time:</string>
+    <string name="infoNoPassengers">No. of Passengers:</string>
+    <string name="infoFee">Fee:</string>
+    <string name="infoNotes">Notes:</string>
+    <string name="infoFromDesc">From:</string>
+    <string name="infoToDesc">To:</string>
+    <string name="infoTrip">Trip:</string>
+    <string name="infoDriverName">Driver:</string>
+    <string name="infoPressToReview">Press to review</string>
+
     <string name="profileHintName">ex: abc</string>
     <string name="profileHintPhone">ex: 0771234567</string>
     <string name="profilePhoneVerify">Verify...</string>
@@ -76,5 +88,7 @@
     <string name="fromDescHint">Ex. Zayouna-Fashion House</string>
     <string name="toDesc">Enter Drop Point Description</string>
     <string name="toDescHint">Ex. Palastine Street-Mall Al-Nakheel</string>
+
+    <string name="rideHistoryReview">Review your ride</string>
 
 </resources>

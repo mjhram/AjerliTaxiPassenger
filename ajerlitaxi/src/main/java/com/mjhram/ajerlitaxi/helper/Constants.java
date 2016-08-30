@@ -39,6 +39,8 @@ public interface Constants {
 	String TRequest_Canceled = "canceled";
 	String URL_updateTRequest = SERVER_URL+"/updateTRequest.php";
 	String URL_getDrivers = SERVER_URL+"/getDrivers.php";
+	String URL_getRideHistory = SERVER_URL+"/getReqHistory.php";
+	String URL_uploadFeedback = SERVER_URL+"/uploadFeedback.php";
 	String URL_updateUserInfo = SERVER_URL+"/updateUserInfo.php";
 	String URL_uploadImage = SERVER_URL+"/uploadImage.php";
 	String URL_UpdateRegId = SERVER_URL+"/updateRegId.php";
@@ -63,6 +65,8 @@ public interface Constants {
 	String RequestsSuggestedFee = "suggestedFee";
 	String RequestsNoOfPassangers = "noOfPassangers";
 	String RequestsAdditionalNotes = "additionalNotes";
+	String RequestsFeedbackId = "feedback_id";
+	String RequestsFeedback = "feedback";
 
 	String ProfileName = "name";
 	String ProfileEmail = "email";
