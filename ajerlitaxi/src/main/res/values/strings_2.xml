@@ -90,5 +90,6 @@
     <string name="toDescHint">Ex. Palastine Street-Mall Al-Nakheel</string>
 
     <string name="rideHistoryReview">Review your ride</string>
+    <string name="lastSeen">Updated on: </string>
 
 </resources>

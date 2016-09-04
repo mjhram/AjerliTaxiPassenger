@@ -111,7 +111,6 @@ public class RideHistoryActivity extends AppCompatActivity {
                 rideHistoryListView.setAdapter(adapter);
             } else {
                 rideHistoryListView.setAdapter((ListAdapter) null);
-                // Error in login. Get the error message
                 String errorMsg = jObj.getString("error_msg");
                 Toast.makeText(getApplicationContext(),
                         errorMsg, Toast.LENGTH_LONG).show();

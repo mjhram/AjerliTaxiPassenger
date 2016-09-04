@@ -7,7 +7,7 @@ public class DriverInfo {
     public int driverId;
     public double latitude, longitude;
     //used to hold nearby drivers info
-    public String name, phone;
+    public String updatedAtTime, name, phone;
     public int imageId;
 
 }

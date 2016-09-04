@@ -73,6 +73,20 @@ class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             snippetUi.setVisibility(View.GONE);
             snippetUi.setText("");
         }
+
+        TextView locTimeUi = ((TextView) view.findViewById(R.id.locTime));
+        String updatedAtTime = "\u200e"+/*view.getContext().getString(R.string.lastSeen) +*/ drvInfo.updatedAtTime;//marker.getSnippet();
+        if(drvInfo.updatedAtTime != null && !(drvInfo.updatedAtTime.isEmpty()))
+        {
+            locTimeUi.setVisibility(View.VISIBLE);
+            //SpannableString locTimeText = new SpannableString("\u200e"+updatedAtTime);
+            //locTimeText.setSpan(new ForegroundColorSpan(Color.BLUE), 0, locTimeText.length(), 0);
+            locTimeUi.setText(updatedAtTime);
+        }
+        else {
+            locTimeUi.setVisibility(View.GONE);
+            locTimeUi.setText("");
+        }
         //image:
         MarkerNetworkImageView markerNwIv = ((MarkerNetworkImageView) view.findViewById(R.id.idInfoWndDrvImage));
         if(drvInfo.imageId == 0) {

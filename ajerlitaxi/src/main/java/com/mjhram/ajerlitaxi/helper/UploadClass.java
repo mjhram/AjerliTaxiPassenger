@@ -693,10 +693,10 @@ public class UploadClass {
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         JSONArray requests = jObj.getJSONArray("results");
-                        double  drvLat[], drvLong[];
+                        //double  drvLat[], drvLong[];
                         int     drvCount = requests.length();
-                        drvLat = new double[drvCount];
-                        drvLong = new double[drvCount];
+                        //drvLat = new double[drvCount];
+                        //drvLong = new double[drvCount];
 
                         DriverInfo[] drvInfo = new DriverInfo[drvCount];
                         for(int i=0;i<drvCount;i++){
@@ -704,6 +704,7 @@ public class UploadClass {
 
                             JSONObject c = requests.getJSONObject(i);
                             tmpDrvInfo.driverId = c.getInt("drvId");
+                            tmpDrvInfo.updatedAtTime = c.getString("loc_time");
                             tmpDrvInfo.name = c.getString("name");
                             tmpDrvInfo.phone = c.getString("phone");
                             tmpDrvInfo.imageId = c.getInt("imageId");

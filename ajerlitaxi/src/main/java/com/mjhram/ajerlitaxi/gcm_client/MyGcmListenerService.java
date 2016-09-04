@@ -52,12 +52,13 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
 
         if (from !=null && from.startsWith("/topics/")) {
+            Log.d(TAG, "From: " + from);
             // message received from some topic.
-        } else {
+        }
+        if(message != null){
+            Log.d(TAG, "Message: " + message);
             try {
                 String tag;
                 JSONObject msgObj;
@@ -65,15 +66,15 @@ public class MyGcmListenerService extends GcmListenerService {
                 msgObj = new JSONObject(message);
                 tag = msgObj.getString("tag");
 
-                if(tag.equalsIgnoreCase("drvId")) {
+                if (tag.equalsIgnoreCase("drvId")) {
                     int drvId = msgObj.getInt("data");//Integer.parseInt(message);
                     EventBus.getDefault().post(new ServiceEvents.TRequestAccepted(drvId));
                     message = getString(R.string.gcmTReqAccepted); //Integer.toString(drvId);
-                } else if(tag.equalsIgnoreCase("treqState")) {
+                } else if (tag.equalsIgnoreCase("treqState")) {
                     String state = msgObj.getString("data");//Integer.parseInt(message);
                     EventBus.getDefault().post(new ServiceEvents.TRequestUpdated(state));
                     message = getString(R.string.gcmTReqUpdated);//getString(R.string.gcmClientReqState) + state;
-                } else if(tag.equalsIgnoreCase("drvLoc")) {
+                } else if (tag.equalsIgnoreCase("drvLoc")) {
                     DriverInfo driverInfo = new DriverInfo();
                     driverInfo.driverId = msgObj.getInt("drvId");
                     driverInfo.latitude = msgObj.getDouble("lat");
@@ -87,7 +88,9 @@ public class MyGcmListenerService extends GcmListenerService {
             }
         }
 
-        sendNotification(message);
+        if(message != null) {
+            sendNotification(message);
+        }
         // [END_EXCLUDE]
     }
     // [END receive_message]

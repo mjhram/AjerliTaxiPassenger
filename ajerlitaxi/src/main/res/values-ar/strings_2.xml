@@ -89,5 +89,6 @@
     <string name="toDescHint">مثلا شارع فلسطين-مول النخيل</string>
 
     <string name="rideHistoryReview">سجل انطباعك</string>
+    <string name="lastSeen">اخر تحديث في: </string>
 
 </resources>
