@@ -1,5 +1,6 @@
 package com.mjhram.ajerlitaxi.helper;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,6 +53,16 @@ public class UploadClass {
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
+    }
+
+    private boolean checkContextIsFinishing(Context cntx) {
+        if ( cntx instanceof Activity) {
+            Activity activity = (Activity)cntx;
+            if ( !activity.isFinishing() ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void uploadFeedback(final int idx, final String feedback) {
@@ -752,6 +763,9 @@ public class UploadClass {
     }
 
     private void showDialog() {
+        if(checkContextIsFinishing(cx)) {
+            return;
+        }
         if (!pDialog.isShowing())
             pDialog.show();
     }

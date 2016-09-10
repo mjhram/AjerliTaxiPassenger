@@ -42,7 +42,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -106,6 +108,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import de.greenrobot.event.EventBus;
 
@@ -118,6 +121,9 @@ public class GpsMainActivity extends GenericViewFragment
         LocationListener,
         OnMapReadyCallback
         {
+
+    public static AtomicInteger activitiesLaunched = new AtomicInteger(0);
+
     private static boolean userInvokedUpload;
     private static Intent serviceIntent;
     private ActionBarDrawerToggle drawerToggle;
@@ -155,6 +161,9 @@ public class GpsMainActivity extends GenericViewFragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (activitiesLaunched.incrementAndGet() > 1) {
+            finish();
+        }
         super.onCreate(savedInstanceState);
 
         tracer = LoggerFactory.getLogger(GpsMainActivity.class.getSimpleName());
@@ -385,6 +394,7 @@ public class GpsMainActivity extends GenericViewFragment
 
     @Override
     public void onDestroy() {
+        activitiesLaunched.getAndDecrement();
         //StopAndUnbindServiceIfRequired();
         //UnregisterEventBus();
         super.onDestroy();
@@ -1025,9 +1035,12 @@ public class GpsMainActivity extends GenericViewFragment
                 String s =  tmpText.replaceAll("\\\\n", "\\\n");
                 String tmp="";
                 if(!(countDrv.isEmpty() && countPas.isEmpty()))  {
-                    tmp = String.format("%s:%s - %s:%s",getResources().getString(R.string.Drivers), countDrv, getResources().getString(R.string.Passengers), countPas);
-                    s += "\n" + tmp;
-                    textviewAds.setText(s);
+                    //tmp = String.format("%s:%s - %s:%s",getResources().getString(R.string.Drivers), countDrv, getResources().getString(R.string.Passengers), countPas);
+                    //s += "\n" + tmp;
+                    //textviewAds.setText(s);
+                    s="<html>" + s + "</html>";
+                    textviewAds.setText(Html.fromHtml(s));
+                    textviewAds.setMovementMethod(LinkMovementMethod.getInstance());
                 }
             }
         }
@@ -1560,6 +1573,12 @@ public class GpsMainActivity extends GenericViewFragment
                                 String long1 = Double.toString(fromMarker.getPosition().longitude);
                                 String lat2 = Double.toString(toMarker.getPosition().latitude);
                                 String long2 = Double.toString(toMarker.getPosition().longitude);
+                                if(fromDesc ==null) {
+                                    fromDesc="";
+                                }
+                                if(toDesc ==null) {
+                                    toDesc="";
+                                }
                                 upload.addTRequest(AppSettings.getUid(), AppSettings.getEmail(),lat1, long1,
                                         lat2,long2,
                                         fromDesc, toDesc,
