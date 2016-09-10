@@ -20,7 +20,9 @@
   <string name="cancel">إلغاء الأمر</string>
   <string name="menu_rideHistory">سجل الطلبات...</string>
   <string name="menu_about">حول التطبيق</string>
+  <string name="menu_logout">تسجيل الخروج</string>
   <string name="menu_exit">خروج</string>
+
   <string name="unknown_direction">مجهول</string>
   <string name="direction_roughly">ما يقرب من %s</string>
   <string name="direction_north">شمال</string>

@@ -98,6 +98,7 @@ import com.mjhram.ajerlitaxi.common.events.ServiceEvents;
 import com.mjhram.ajerlitaxi.common.slf4j.SessionLogcatAppender;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.UploadClass;
+import com.mjhram.ajerlitaxi.login_register.LoginActivity;
 import com.mjhram.ajerlitaxi.views.GenericViewFragment;
 
 import org.slf4j.LoggerFactory;
@@ -585,6 +586,11 @@ public class GpsMainActivity extends GenericViewFragment
         drawer.addDivider();
 
         drawer.addItem(new DrawerItem()
+                .setId(14)
+                .setImage(ContextCompat.getDrawable(this, R.drawable.logout))
+                .setTextPrimary(getString(R.string.menu_logout)));
+
+        drawer.addItem(new DrawerItem()
                 .setId(12)
                 .setImage(ContextCompat.getDrawable(this, R.drawable.exit))
                 .setTextPrimary(getString(R.string.menu_exit)));
@@ -619,7 +625,13 @@ public class GpsMainActivity extends GenericViewFragment
                                 .positiveText(R.string.ok)
                                 .show();
                         break;
-                    case 12:
+                    case 14://logout
+                        EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));
+                        AppSettings.logout();
+                        Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(loginActivity);
+                        break;
+                    case 12://exit
                         EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));
                         finish();
                         break;

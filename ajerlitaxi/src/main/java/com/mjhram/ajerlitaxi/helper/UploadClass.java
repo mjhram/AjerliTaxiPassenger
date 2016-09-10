@@ -300,7 +300,7 @@ public class UploadClass {
         showDialog();
 
         final String uploadImage = Utilities.getStringImage(bitmap);
-        AppSettings.setPhoto(uploadImage);
+        //AppSettings.setPhoto(uploadImage);
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 Constants.URL_uploadImage, new Response.Listener<String>() {
 

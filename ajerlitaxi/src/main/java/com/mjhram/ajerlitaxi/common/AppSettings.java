@@ -128,20 +128,24 @@ public class AppSettings extends Application {
         return prefs.getBoolean(Constants.KEY_IS_LOGGEDIN, false);
     }
 
+    public static void logout(){
+        SharedPreferences.Editor editor = prefs.edit();
+        //editor.putBoolean(Constants.KEY_IS_LOGGEDIN, false);
+        editor.clear();
+        editor.commit();
+    }
+
     public static String getUid(){
         return prefs.getString(Constants.KEY_UID, "-1");
     }
 
-    public static void setPhoto(String photo){
+    /*public static void setPhoto(String photo){
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.KEY_PHOTO, photo);
         editor.commit();
-    }
+    }*/
 
-    public static String getPhoto(){
-        String tmp = prefs.getString(Constants.KEY_PHOTO, "");
-        return tmp;
-    }
+
 
     public static String getPhotoId(){
         String tmp = prefs.getString(Constants.KEY_PHOTO_ID, "");
