@@ -630,6 +630,7 @@ public class GpsMainActivity extends GenericViewFragment
                         AppSettings.logout();
                         Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(loginActivity);
+                        finish();
                         break;
                     case 12://exit
                         EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));

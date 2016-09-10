@@ -28,7 +28,7 @@ tools:showIn="@layout/activity_profile">
             android:layout_centerVertical="true"
             android:src="@drawable/ic_user" />
 
-        <EditText
+        <TextView
             android:id="@+id/profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@ tools:showIn="@layout/activity_profile">
             android:layout_toRightOf="@id/im_profile_username"
             android:ellipsize="end"
             android:maxLines="1"
-            android:hint="@string/profileHintName"
+            android:hint="---"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#212121"
             android:layout_alignParentEnd="true"
@@ -96,7 +96,7 @@ tools:showIn="@layout/activity_profile">
             android:layout_centerVertical="true"
             android:src="@drawable/ic_email" />
 
-        <EditText
+        <TextView
             android:id="@+id/profile_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@ tools:showIn="@layout/activity_profile">
             android:layout_toRightOf="@id/ivContactItem3"
             android:ellipsize="end"
             android:maxLines="1"
-            android:hint="@string/profileHintEmail"
+            android:hint="---"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#212121"
             android:layout_alignParentEnd="true"

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -29,15 +30,16 @@ import java.io.IOException;
 import de.greenrobot.event.EventBus;
 
 public class ProfileActivity extends AppCompatActivity {
-    EditText    edit_username, edit_email, edit_phone;
+    TextView    tv_username, tv_useremail;
+    EditText     edit_phone;
     //ImageView   photoImageView;
     private NetworkImageView networkImageViewUser;
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        savedInstanceState.putString("USER_NAME", edit_username.getText().toString());
-        savedInstanceState.putString("EMAIL", edit_email.getText().toString());
+        savedInstanceState.putString("USER_NAME", tv_username.getText().toString());
+        savedInstanceState.putString("EMAIL", tv_useremail.getText().toString());
         String tmp = edit_phone.getText().toString();
         savedInstanceState.putString("PHONE", tmp);
         // Always call the superclass so it can save the view hierarchy state
@@ -51,9 +53,9 @@ public class ProfileActivity extends AppCompatActivity {
         // This bundle has also been passed to onCreate.
         String tmp;
         tmp = savedInstanceState.getString("USER_NAME");
-        edit_username.setText(tmp);
+        tv_username.setText(tmp);
         tmp = savedInstanceState.getString("EMAIL");
-        edit_email.setText(tmp);
+        tv_useremail.setText(tmp);
         tmp = savedInstanceState.getString("PHONE");
         edit_phone.setText(tmp);
     }
@@ -86,12 +88,12 @@ public class ProfileActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                         */
                 UploadClass uc = new UploadClass(ProfileActivity.this);
-                uc.updateUserInfo(edit_username.getText().toString(), edit_email.getText().toString(), edit_phone.getText().toString());
+                uc.updateUserInfo(tv_username.getText().toString(), tv_useremail.getText().toString(), edit_phone.getText().toString());
             }
         });
 
-        edit_username = (EditText) findViewById(R.id.profile_username);
-        edit_email =(EditText) findViewById(R.id.profile_email);
+        tv_username = (TextView) findViewById(R.id.profile_username);
+        tv_useremail =(TextView) findViewById(R.id.profile_email);
         edit_phone =(EditText) findViewById(R.id.profile_phone);
         networkImageViewUser = (NetworkImageView) findViewById(R.id.profilePhoto);
 
@@ -109,8 +111,8 @@ public class ProfileActivity extends AppCompatActivity {
                 showFileChooser();
             }
         });*/
-        edit_username.setText(AppSettings.getName());
-        edit_email.setText(AppSettings.getEmail());
+        tv_username.setText(AppSettings.getName());
+        tv_useremail.setText(AppSettings.getEmail());
         edit_phone.setText(AppSettings.getPhone());
         {
             //final String IMAGE_URL = "http://developer.android.com/images/training/system-ui.png";
@@ -178,8 +180,8 @@ public class ProfileActivity extends AppCompatActivity {
     @EventBusHook
     public void onEventMainThread(ServiceEvents.UpdateProfile updateProfileEvent){
         UserInfo user = updateProfileEvent.user;
-        edit_username.setText(user.name);
-        edit_email.setText(user.email);
+        tv_username.setText(user.name);
+        tv_useremail.setText(user.email);
         edit_phone.setText(user.phone);
         {
             ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
