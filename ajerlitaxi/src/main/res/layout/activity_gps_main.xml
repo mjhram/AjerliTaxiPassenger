@@ -273,6 +273,13 @@
                     android:layout_marginTop="50dp" />
             </RelativeLayout>
        </FrameLayout>
+        <!--com.roughike.bottombar.BottomBar
+            android:id="@+id/bottomBarMain"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/ajerliColor"
+            app:bb_tabXmlResource="@xml/bottombar_tabs_main" / -->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -288,7 +295,9 @@
             android:alpha=".7"
             android:background="@color/ajerliColor"
             />
+
     </RelativeLayout>
+
 
 
 

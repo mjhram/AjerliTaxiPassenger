@@ -265,6 +265,9 @@ public class LoginActivity extends Activity {
         }
 
         private void showDialog() {
+            if(Utilities.checkContextIsFinishing(this)) {
+                return;
+            }
             if (!pDialog.isShowing())
             pDialog.show();
         }

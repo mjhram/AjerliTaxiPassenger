@@ -204,6 +204,24 @@ public class GpsMainActivity extends GenericViewFragment
             }
         });
 
+        /*BottomBar bottomBarMain = (BottomBar) findViewById(R.id.bottomBarMain);
+
+        bottomBarMain.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                tabSelected(tabId);
+
+            }
+
+        });
+
+        bottomBarMain.setOnTabReselectListener(new OnTabReselectListener() {
+            @Override
+            public void onTabReSelected(@IdRes int tabId) {
+                tabSelected(tabId);
+            }
+        });*/
+
         relativeLayoutAds = (RelativeLayout) findViewById(R.id.relativeLayoutAds);
         btnAdsX = (ImageButton) findViewById(R.id.btnAdsX);
         btnAdsX.setOnClickListener(new View.OnClickListener() {
@@ -1641,6 +1659,9 @@ public class GpsMainActivity extends GenericViewFragment
 
     private ProgressDialog pDialog;
     private void showDialog() {
+        if(Utilities.checkContextIsFinishing(this)) {
+            return;
+        }
         if (!pDialog.isShowing())
             pDialog.show();
     }
@@ -1691,4 +1712,19 @@ public class GpsMainActivity extends GenericViewFragment
         AppSettings tmp = AppSettings.getInstance();
         tmp.addToRequestQueue(strReq, tag_string_req);
     }
+
+    /*private void tabSelected(@IdRes int tabId) {
+        switch(tabId){
+            case R.id.tab_profile:
+                //startActivity(new Intent(this, ProfileActivity.class));
+                break;
+            case R.id.tab_history:
+                Intent aActivity = new Intent(this, RideHistoryActivity.class);
+                startActivity(aActivity);
+                break;
+            case R.id.tab_ridenow:
+
+                break;
+        }
+    }*/
 }

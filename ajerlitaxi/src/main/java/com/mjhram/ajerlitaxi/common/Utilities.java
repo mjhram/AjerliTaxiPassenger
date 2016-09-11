@@ -54,6 +54,16 @@ public class Utilities {
     private static MaterialDialog pd;
     private static org.slf4j.Logger tracer = LoggerFactory.getLogger(Utilities.class.getSimpleName());
 
+    public static boolean checkContextIsFinishing(Context cntx) {
+        if ( cntx instanceof Activity) {
+            Activity activity = (Activity)cntx;
+            if ( !activity.isFinishing() ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String getStringImage(Bitmap bmp){
         bmp = resizeImage(bmp);
 

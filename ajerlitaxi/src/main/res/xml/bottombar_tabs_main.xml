@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_profile"
+        icon="@drawable/ic_friends"
+        title="Profile" />
+    <tab
+        id="@+id/tab_history"
+        icon="@drawable/ic_history"
+        title="History" />
+
+    <tab
+        id="@+id/tab_ridenow"
+        icon="@drawable/ic_nearby"
+        title="Ride" />
+</tabs>

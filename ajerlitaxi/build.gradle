@@ -166,6 +166,7 @@ dependencies {
     //compile 'com.android.support:cardview-v7:22.+'
     //Material dialogs
     compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+    compile 'com.afollestad.material-dialogs:commons:0.9.0.1'
     //The material drawer
     compile 'com.heinrichreimersoftware.materialdrawer:library:2.1'
     //Progress button

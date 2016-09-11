@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
+import com.mjhram.ajerlitaxi.common.Utilities;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.phpErrorMessages;
 
@@ -207,6 +208,9 @@ public class RegisterActivity extends Activity {
         }
 
         private void showDialog() {
+            if(Utilities.checkContextIsFinishing(this)) {
+                return;
+            }
             if (!pDialog.isShowing())
                 pDialog.show();
         }
