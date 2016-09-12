@@ -395,6 +395,7 @@ public class GpsMainActivity extends GenericViewFragment
     protected void onResume() {
 
         super.onResume();
+        EventBus.getDefault().post(new ServiceEvents.GetPassengerStateEvent());
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constants.UPDATE_REQ));
         mGoogleApiClient.connect();
@@ -855,6 +856,8 @@ public class GpsMainActivity extends GenericViewFragment
     }
 
     void setStateToIdle() {
+        countDownTimer.cancel();
+
         AppSettings.requestId = -1;
         pickdropState=0;
 
@@ -902,6 +905,7 @@ public class GpsMainActivity extends GenericViewFragment
                 driverInfoLayout.setVisibility(View.INVISIBLE);
             }
         }
+        countDownTimer.cancel();
         //2. driver assigned or passanger picked
         LatLng currentPosition = new LatLng(tRequestObj.fromLat, tRequestObj.fromLong);
         if(fromMarker == null) {
