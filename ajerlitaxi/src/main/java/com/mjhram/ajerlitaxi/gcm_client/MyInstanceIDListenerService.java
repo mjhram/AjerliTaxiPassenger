@@ -16,11 +16,13 @@
 
 package com.mjhram.ajerlitaxi.gcm_client;
 
-import android.content.Intent;
+import android.util.Log;
 
-import com.google.android.gms.iid.InstanceIDListenerService;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.mjhram.ajerlitaxi.common.AppSettings;
 
-public class MyInstanceIDListenerService extends InstanceIDListenerService {
+public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyInstanceIDLS";
 
@@ -32,9 +34,36 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
+        /**
+         * Called if InstanceID token is updated. This may occur if the security of
+         * the previous token had been compromised. Note that this is also called
+         * when the InstanceID token is initially generated, so this is where
+         * you retrieve the token.
+         */
+        // [START refresh_token]
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        // TODO: Implement this method to send any registration to your app's servers.
+        sendRegistrationToServer(refreshedToken);
+
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
+        //Intent intent = new Intent(this, RegistrationIntentService.class);
+        //startService(intent);
     }
     // [END refresh_token]
+
+    private void sendRegistrationToServer(String token) {
+        String tmp = AppSettings.getRegId();
+        //always send to server
+        // if(!token.equals(tmp))
+        {
+            // Add custom implementation, as needed.
+            AppSettings.shouldUploadRegId = true;
+            AppSettings.setRegId(token);
+        }
+        AppSettings.regId = token;
+        if(token != null) {
+            AppSettings.online = true;
+        }
+    }
 }

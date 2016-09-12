@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.0.0'
         classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 
@@ -132,12 +133,13 @@ dependencies {
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
-    //compile 'com.google.android.gms:play-services-base:7.5.0'
-    //compile 'com.google.android.gms:play-services-location:7.5.0'
-    //compile 'com.google.android.gms:play-services:8.1.0'
-    compile 'com.google.android.gms:play-services-gcm:9.2.0'
+
+    //compile 'com.google.android.gms:play-services-gcm:9.2.0'
     compile 'com.google.android.gms:play-services-maps:9.2.0'
     compile 'com.google.android.gms:play-services-location:9.2.0'
+
+    compile "com.google.firebase:firebase-messaging:9.2.0"
+    compile 'com.google.firebase:firebase-core:9.2.0'
     //compile 'com.google.android.gms:play-services-drive:7.5.0'
     //compile 'commons-net:commons-net:2.0' //for 'ftp' upload
     /*compile('org.apache.httpcomponents:httpmime:4.0.3') {
@@ -247,3 +249,5 @@ if (project.hasProperty("CROWDIN_API_KEY")) {
         sourceFile = "$projectDir/src/main/res/values/strings_faq.xml"
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

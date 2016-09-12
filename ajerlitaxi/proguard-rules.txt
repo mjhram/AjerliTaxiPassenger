@@ -50,3 +50,7 @@ public void onEventMainThread(**);
 -dontwarn android.net.http.AndroidHttpClient
 -dontwarn com.google.android.gms.**
 -dontwarn com.android.volley.toolbox.**
+
+# Basic ProGuard rules for Firebase Android SDK 2.0.0+
+#-keep class com.google.firebase.** { *; }
+#-dontwarn com.google.firebase.**

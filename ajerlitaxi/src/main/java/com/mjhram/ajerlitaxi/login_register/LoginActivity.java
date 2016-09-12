@@ -33,7 +33,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.Utilities;
-import com.mjhram.ajerlitaxi.gcm_client.RegistrationIntentService;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.UploadClass;
 import com.mjhram.ajerlitaxi.helper.phpErrorMessages;
@@ -100,8 +99,8 @@ public class LoginActivity extends Activity {
         };
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
+            //Intent intent = new Intent(this, RegistrationIntentService.class);
+            //startService(intent);
         }
         // Session manager
         //session = new SessionManager(getApplicationContext());
