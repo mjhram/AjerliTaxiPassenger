@@ -856,7 +856,9 @@ public class GpsMainActivity extends GenericViewFragment
     }
 
     void setStateToIdle() {
-        countDownTimer.cancel();
+        if(countDownTimer != null) {
+            countDownTimer.cancel();
+        }
 
         AppSettings.requestId = -1;
         pickdropState=0;
@@ -905,7 +907,7 @@ public class GpsMainActivity extends GenericViewFragment
                 driverInfoLayout.setVisibility(View.INVISIBLE);
             }
         }
-        countDownTimer.cancel();
+
         //2. driver assigned or passanger picked
         LatLng currentPosition = new LatLng(tRequestObj.fromLat, tRequestObj.fromLong);
         if(fromMarker == null) {
@@ -1158,7 +1160,7 @@ public class GpsMainActivity extends GenericViewFragment
         //cancelTRequest(Constants.TRequest_Canceled);
         pickdropState=0;
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
-        countDownTimer.cancel();
+        //countDownTimer.cancel();
 
         UploadClass uc = new UploadClass(this);
         uc.getPassangerState(AppSettings.getUid());
@@ -1658,7 +1660,7 @@ public class GpsMainActivity extends GenericViewFragment
             AppSettings.requestId = -1;
         }
         setStateToIdle();
-        countDownTimer.cancel();
+        //countDownTimer.cancel();
     }
 
     private ProgressDialog pDialog;

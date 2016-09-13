@@ -499,9 +499,11 @@ public class UploadClass {
                         String errorMsg = jObj.getString("error_msg");//Error always false
                         Toast.makeText(cx,
                                 errorMsg, Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new ServiceEvents.ErrorConnectionEvent());
                 }
             }
         }, new Response.ErrorListener() {
