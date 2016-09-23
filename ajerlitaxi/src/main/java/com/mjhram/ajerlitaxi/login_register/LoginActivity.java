@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.Utilities;
@@ -121,12 +122,15 @@ public class LoginActivity extends Activity {
                 String name = inputName.getText().toString();
                 String password = inputPassword.getText().toString();
                 //check for regId
-                if(AppSettings.regId==null) {
+                /*if(AppSettings.getRegId()==null) {
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    AppSettings.setRegId(token);
+
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.loginMsgNotRegistered), Toast.LENGTH_LONG)
                             .show();
                     finish();
-                }
+                }*/
                 // Check for empty data in the form
                 if (name.trim().length() > 0 && password.trim().length() > 0) {
                     // login user
@@ -251,7 +255,14 @@ public class LoginActivity extends Activity {
                 params.put("tag", "login");
                 params.put("name", name);
                 params.put("password", password);
-                params.put("regId", AppSettings.regId);
+                String regId = AppSettings.getRegId();
+                if(regId == null || regId.isEmpty()) {
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    AppSettings.setRegId(token);
+                    regId = token;
+                }
+                AppSettings.shouldUploadRegId = false;
+                params.put("regId", regId == null?"":regId);
                 params.put("type", "Pas");
                 return params;
             }
@@ -313,7 +324,7 @@ public class LoginActivity extends Activity {
                 .input(getString(R.string.hint_email), null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        UploadClass uc = new UploadClass(LoginActivity.this);
+                        UploadClass uc = UploadClass.getInstance(LoginActivity.this);
                         String email = input.toString();
                         uc.forgotPassword(email);
                     }

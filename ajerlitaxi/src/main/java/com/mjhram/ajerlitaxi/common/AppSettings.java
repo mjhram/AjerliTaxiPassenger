@@ -57,7 +57,7 @@ public class AppSettings extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     public static final String TAG = AppSettings.class.getSimpleName();
-    public static String regId;
+    //public static String regId;
     public static boolean firstZooming = true;
     public static int requestId = -1;
 

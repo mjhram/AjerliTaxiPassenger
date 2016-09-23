@@ -36,6 +36,7 @@ import de.greenrobot.event.EventBus;
  * Created by mohammad.haider on 10/8/2015.
  */
 public class UploadClass {
+    private static UploadClass uc_instanse;
     private ProgressDialog pDialog;
     private Context cx;
     private static final String URL_addTRequest = Constants.SERVER_URL + "/addTRequest.php";
@@ -46,15 +47,69 @@ public class UploadClass {
     private static final String TAG = UploadClass.class.getSimpleName();
     private phpErrorMessages phpErrorMsgs;
 
-    public UploadClass(Context theCx) {
+    public UploadClass(){
+        phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
+    }
+
+    public static UploadClass getInstance(Context theCx) {
+        if(uc_instanse == null){
+            uc_instanse = new UploadClass();
+        }
+        uc_instanse.cx = theCx;
+        uc_instanse.pDialog = new ProgressDialog(uc_instanse.cx);
+        uc_instanse.pDialog.setCancelable(false);
+        return uc_instanse;
+    }
+
+    /*public UploadClass(Context theCx) {
         cx = theCx;
         phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
+    }*/
+
+    public void updateRegId(final String userId, final String regId) {
+        String tag_string_req = "regId_update";
+
+        pDialog.setMessage(cx.getString(R.string.gpsMainDlgMsgUpdating));
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Constants.URL_UpdateRegId, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(AppSettings.TAG, "update reg id Response: " + response.toString());
+                hideDialog();
+                AppSettings.setRegId(userId);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(AppSettings.TAG, "Update Error: " + error.getMessage());
+                Toast.makeText(cx,
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("tag", "updateRegId");
+                params.put("userId", userId);
+                params.put("regId", regId);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppSettings tmp = AppSettings.getInstance();
+        tmp.addToRequestQueue(strReq, tag_string_req);
     }
-
-
 
     public void uploadFeedback(final int idx, final String feedback) {
         // Tag used to cancel the request

@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.mjhram.ajerlitaxi.common.AppSettings;
+import com.mjhram.ajerlitaxi.helper.UploadClass;
 
 public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
@@ -53,17 +54,19 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
     // [END refresh_token]
 
     private void sendRegistrationToServer(String token) {
-        String tmp = AppSettings.getRegId();
         //always send to server
-        // if(!token.equals(tmp))
-        {
-            // Add custom implementation, as needed.
-            AppSettings.shouldUploadRegId = true;
-            AppSettings.setRegId(token);
-        }
-        AppSettings.regId = token;
+        // Add custom implementation, as needed.
+        AppSettings.setRegId(token);
+        //AppSettings.regId = token;
         if(token != null) {
             AppSettings.online = true;
+            if(AppSettings.getUid() != "-1") {
+                UploadClass uc = UploadClass.getInstance(this);
+                uc.updateRegId(AppSettings.getUid(), AppSettings.getRegId());
+                AppSettings.shouldUploadRegId = false;
+            } else {
+                AppSettings.shouldUploadRegId = true;
+            }
         }
     }
 }

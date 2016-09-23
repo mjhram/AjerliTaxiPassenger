@@ -20,6 +20,7 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
@@ -196,7 +197,14 @@ public class RegisterActivity extends Activity {
                     params.put("email", email);
                     params.put("phone", userPhone);
                     params.put("password", password);
-                    params.put("regId", AppSettings.regId);
+                    String regId = AppSettings.getRegId();
+                    if(regId == null || regId.isEmpty()) {
+                        String token = FirebaseInstanceId.getInstance().getToken();
+                        AppSettings.setRegId(token);
+                        regId = token;
+                    }
+                    AppSettings.shouldUploadRegId = false;
+                    params.put("regId", regId == null?"":regId);
                     params.put("type", "Pas");
                     String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                     params.put("androidid", androidId);

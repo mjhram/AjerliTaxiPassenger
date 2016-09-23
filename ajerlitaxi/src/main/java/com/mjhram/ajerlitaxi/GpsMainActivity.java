@@ -62,12 +62,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -84,6 +80,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.heinrichreimersoftware.materialdrawer.DrawerView;
 import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
 import com.mjhram.ajerlitaxi.Faq.Faqtivity;
@@ -107,7 +104,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -261,12 +257,19 @@ public class GpsMainActivity extends GenericViewFragment
             tracer.debug("Start logging on app launch");
             EventBus.getDefault().postSticky(new CommandEvents.RequestStartStop(true));
         }*/
-        if(AppSettings.shouldUploadRegId) {
+        String regId = AppSettings.getRegId();
+        if(regId == null || regId.isEmpty()) {
+            String token = FirebaseInstanceId.getInstance().getToken();
+            AppSettings.setRegId(token);
+            regId = token;
+        }
+        if(AppSettings.shouldUploadRegId && regId.isEmpty()==false) {
             AppSettings.shouldUploadRegId = false;
-            updateRegId(AppSettings.getUid(), AppSettings.regId);
+            UploadClass uc = UploadClass.getInstance(this);
+            uc.updateRegId(AppSettings.getUid(), regId);
         }
         checkGpsEnabled();
-        UploadClass uc = new UploadClass(this);
+        UploadClass uc = UploadClass.getInstance(this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -282,7 +285,7 @@ public class GpsMainActivity extends GenericViewFragment
                                                     Location location = LocationServices.FusedLocationApi.getLastLocation(
                                                             mGoogleApiClient);
                                                     if (location != null) {
-                                                        UploadClass uc = new UploadClass(GpsMainActivity.this);
+                                                        UploadClass uc = UploadClass.getInstance(GpsMainActivity.this);
                                                         uc.getNearbyDrivers(location);
                                                     } else {
                                                         Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
@@ -968,7 +971,7 @@ public class GpsMainActivity extends GenericViewFragment
 
     @EventBusHook
     public void onEventMainThread(ServiceEvents.GetPassengerStateEvent tmp){
-        UploadClass uc = new UploadClass(GpsMainActivity.this);
+        UploadClass uc = UploadClass.getInstance(GpsMainActivity.this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -1149,7 +1152,7 @@ public class GpsMainActivity extends GenericViewFragment
         /*AppSettings.requestId = -1;
         cancelTRequest(null);*/
 
-        UploadClass uc = new UploadClass(this);
+        UploadClass uc = UploadClass.getInstance(this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -1162,7 +1165,7 @@ public class GpsMainActivity extends GenericViewFragment
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         //countDownTimer.cancel();
 
-        UploadClass uc = new UploadClass(this);
+        UploadClass uc = UploadClass.getInstance(this);
         uc.getPassangerState(AppSettings.getUid());
         /*if(pickdropState != 0) {
             pickdropState=0;
@@ -1461,7 +1464,7 @@ public class GpsMainActivity extends GenericViewFragment
                         /*//remove the T-request
                         pickdropState=0;
                         btnPickDrop.setText("Pick From...");
-                        UploadClass upload = new UploadClass(GpsMainActivity.this);
+                        UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
                         if(AppSettings.requestId != -1) {
                             upload.setTRequestState(Integer.toString(AppSettings.requestId), AppSettings.TRequest_Expired);
                             AppSettings.requestId = -1;
@@ -1605,7 +1608,7 @@ public class GpsMainActivity extends GenericViewFragment
                                 pickdropState=3;
                                 clearDriversMarkers();
                                 startCounter(15*60);
-                                UploadClass upload = new UploadClass(GpsMainActivity.this);
+                                UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
                                 String lat1 = Double.toString(fromMarker.getPosition().latitude);
                                 String long1 = Double.toString(fromMarker.getPosition().longitude);
                                 String lat2 = Double.toString(toMarker.getPosition().latitude);
@@ -1636,7 +1639,7 @@ public class GpsMainActivity extends GenericViewFragment
                 cancelTRequest(Constants.TRequest_Canceled);
                 break;
             case 20://reconnect
-                uc = new UploadClass(this);
+                uc = UploadClass.getInstance(this);
                 uc.getPassangerState(AppSettings.getUid());
                 break;
 
@@ -1655,7 +1658,7 @@ public class GpsMainActivity extends GenericViewFragment
         pickdropState=0;
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         if(AppSettings.requestId != -1) {
-            UploadClass upload = new UploadClass(GpsMainActivity.this);
+            UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
             upload.setTRequestState(Integer.toString(AppSettings.requestId), tReqState);
             AppSettings.requestId = -1;
         }
@@ -1677,47 +1680,7 @@ public class GpsMainActivity extends GenericViewFragment
             pDialog.dismiss();
     }
 
-    private void updateRegId(final String userId, final String regId) {
-        String tag_string_req = "regId_update";
 
-        pDialog.setMessage(getString(R.string.gpsMainDlgMsgUpdating));
-        showDialog();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                Constants.URL_UpdateRegId, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(AppSettings.TAG, "update reg id Response: " + response.toString());
-                hideDialog();
-                AppSettings.setRegId(userId);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(AppSettings.TAG, "Update Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("tag", "updateRegId");
-                params.put("userId", userId);
-                params.put("regId", regId);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        AppSettings tmp = AppSettings.getInstance();
-        tmp.addToRequestQueue(strReq, tag_string_req);
-    }
 
     /*private void tabSelected(@IdRes int tabId) {
         switch(tabId){
