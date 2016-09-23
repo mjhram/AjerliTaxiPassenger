@@ -265,11 +265,11 @@ public class GpsMainActivity extends GenericViewFragment
         }
         if(AppSettings.shouldUploadRegId && regId.isEmpty()==false) {
             AppSettings.shouldUploadRegId = false;
-            UploadClass uc = UploadClass.getInstance(this);
+            UploadClass uc = new UploadClass(this);
             uc.updateRegId(AppSettings.getUid(), regId);
         }
         checkGpsEnabled();
-        UploadClass uc = UploadClass.getInstance(this);
+        UploadClass uc = new UploadClass(this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -285,7 +285,7 @@ public class GpsMainActivity extends GenericViewFragment
                                                     Location location = LocationServices.FusedLocationApi.getLastLocation(
                                                             mGoogleApiClient);
                                                     if (location != null) {
-                                                        UploadClass uc = UploadClass.getInstance(GpsMainActivity.this);
+                                                        UploadClass uc = new UploadClass(GpsMainActivity.this);
                                                         uc.getNearbyDrivers(location);
                                                     } else {
                                                         Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
@@ -861,6 +861,7 @@ public class GpsMainActivity extends GenericViewFragment
     void setStateToIdle() {
         if(countDownTimer != null) {
             countDownTimer.cancel();
+            countDownTimer=null;
         }
 
         AppSettings.requestId = -1;
@@ -971,7 +972,7 @@ public class GpsMainActivity extends GenericViewFragment
 
     @EventBusHook
     public void onEventMainThread(ServiceEvents.GetPassengerStateEvent tmp){
-        UploadClass uc = UploadClass.getInstance(GpsMainActivity.this);
+        UploadClass uc = new UploadClass(GpsMainActivity.this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -1152,7 +1153,7 @@ public class GpsMainActivity extends GenericViewFragment
         /*AppSettings.requestId = -1;
         cancelTRequest(null);*/
 
-        UploadClass uc = UploadClass.getInstance(this);
+        UploadClass uc = new UploadClass(this);
         uc.getPassangerState(AppSettings.getUid());
     }
 
@@ -1165,7 +1166,7 @@ public class GpsMainActivity extends GenericViewFragment
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         //countDownTimer.cancel();
 
-        UploadClass uc = UploadClass.getInstance(this);
+        UploadClass uc = new UploadClass(this);
         uc.getPassangerState(AppSettings.getUid());
         /*if(pickdropState != 0) {
             pickdropState=0;
@@ -1451,6 +1452,10 @@ public class GpsMainActivity extends GenericViewFragment
     }*/
 
     private void startCounter(int counterTimer) {
+        if(countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer=null;
+        }
         countDownTimer = new CountDownTimer(counterTimer*1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 long minutes = (millisUntilFinished) / (60*1000);
@@ -1464,7 +1469,7 @@ public class GpsMainActivity extends GenericViewFragment
                         /*//remove the T-request
                         pickdropState=0;
                         btnPickDrop.setText("Pick From...");
-                        UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
+                        UploadClass upload = new UploadClass(GpsMainActivity.this);
                         if(AppSettings.requestId != -1) {
                             upload.setTRequestState(Integer.toString(AppSettings.requestId), AppSettings.TRequest_Expired);
                             AppSettings.requestId = -1;
@@ -1608,7 +1613,7 @@ public class GpsMainActivity extends GenericViewFragment
                                 pickdropState=3;
                                 clearDriversMarkers();
                                 startCounter(15*60);
-                                UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
+                                UploadClass upload = new UploadClass(GpsMainActivity.this);
                                 String lat1 = Double.toString(fromMarker.getPosition().latitude);
                                 String long1 = Double.toString(fromMarker.getPosition().longitude);
                                 String lat2 = Double.toString(toMarker.getPosition().latitude);
@@ -1639,7 +1644,7 @@ public class GpsMainActivity extends GenericViewFragment
                 cancelTRequest(Constants.TRequest_Canceled);
                 break;
             case 20://reconnect
-                uc = UploadClass.getInstance(this);
+                uc = new UploadClass(this);
                 uc.getPassangerState(AppSettings.getUid());
                 break;
 
@@ -1658,7 +1663,7 @@ public class GpsMainActivity extends GenericViewFragment
         pickdropState=0;
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         if(AppSettings.requestId != -1) {
-            UploadClass upload = UploadClass.getInstance(GpsMainActivity.this);
+            UploadClass upload = new UploadClass(GpsMainActivity.this);
             upload.setTRequestState(Integer.toString(AppSettings.requestId), tReqState);
             AppSettings.requestId = -1;
         }

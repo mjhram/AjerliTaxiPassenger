@@ -36,7 +36,6 @@ import de.greenrobot.event.EventBus;
  * Created by mohammad.haider on 10/8/2015.
  */
 public class UploadClass {
-    private static UploadClass uc_instanse;
     private ProgressDialog pDialog;
     private Context cx;
     private static final String URL_addTRequest = Constants.SERVER_URL + "/addTRequest.php";
@@ -47,27 +46,13 @@ public class UploadClass {
     private static final String TAG = UploadClass.class.getSimpleName();
     private phpErrorMessages phpErrorMsgs;
 
-    public UploadClass(){
-        phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
-    }
-
-    public static UploadClass getInstance(Context theCx) {
-        if(uc_instanse == null){
-            uc_instanse = new UploadClass();
-        }
-        uc_instanse.cx = theCx;
-        uc_instanse.pDialog = new ProgressDialog(uc_instanse.cx);
-        uc_instanse.pDialog.setCancelable(false);
-        return uc_instanse;
-    }
-
-    /*public UploadClass(Context theCx) {
+    public UploadClass(Context theCx) {
         cx = theCx;
         phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
         pDialog = new ProgressDialog(cx);
         pDialog.setCancelable(false);
 
-    }*/
+    }
 
     public void updateRegId(final String userId, final String regId) {
         String tag_string_req = "regId_update";

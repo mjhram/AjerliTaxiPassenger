@@ -324,7 +324,7 @@ public class LoginActivity extends Activity {
                 .input(getString(R.string.hint_email), null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        UploadClass uc = UploadClass.getInstance(LoginActivity.this);
+                        UploadClass uc = new UploadClass(LoginActivity.this);
                         String email = input.toString();
                         uc.forgotPassword(email);
                     }

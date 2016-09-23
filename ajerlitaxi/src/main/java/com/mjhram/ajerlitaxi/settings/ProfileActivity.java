@@ -87,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                         */
-                UploadClass uc = UploadClass.getInstance(ProfileActivity.this);
+                UploadClass uc = new UploadClass(ProfileActivity.this);
                 uc.updateUserInfo(tv_username.getText().toString(), tv_useremail.getText().toString(), edit_phone.getText().toString());
             }
         });
@@ -119,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
             ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
             networkImageViewUser.setImageUrl(Constants.URL_downloadUserPhoto+AppSettings.getPhotoId(), mImageLoader);
         }
-        UploadClass uc = UploadClass.getInstance(this);
+        UploadClass uc = new UploadClass(this);
         uc.getUserProfile(AppSettings.getUid());
     }
 
@@ -159,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
             Uri filePath = data.getData();
             try {
                 Bitmap profilePhotoBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                UploadClass uc = UploadClass.getInstance(this);
+                UploadClass uc = new UploadClass(this);
                 uc.updateUserPhoto(profilePhotoBitmap, networkImageViewUser);
             } catch (IOException e) {
                 e.printStackTrace();

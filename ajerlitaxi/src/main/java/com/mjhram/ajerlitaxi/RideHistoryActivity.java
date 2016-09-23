@@ -47,7 +47,7 @@ public class RideHistoryActivity extends AppCompatActivity {
                             .input(null, null, new MaterialDialog.InputCallback() {
                                 @Override
                                 public void onInput(MaterialDialog dialog, CharSequence input) {
-                                    UploadClass uc = UploadClass.getInstance(RideHistoryActivity.this);
+                                    UploadClass uc = new UploadClass(RideHistoryActivity.this);
                                     String feedback = input.toString();
                                     uc.uploadFeedback(tReq.idx, feedback);
                                 }
@@ -57,7 +57,7 @@ public class RideHistoryActivity extends AppCompatActivity {
                 }
             }
         });
-        UploadClass uc = UploadClass.getInstance(this);
+        UploadClass uc = new UploadClass(this);
         uc.getRideHistory(this);
     }
 

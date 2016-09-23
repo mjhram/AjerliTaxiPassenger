@@ -61,7 +61,7 @@ public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
         if(token != null) {
             AppSettings.online = true;
             if(AppSettings.getUid() != "-1") {
-                UploadClass uc = UploadClass.getInstance(this);
+                UploadClass uc = new UploadClass(this);
                 uc.updateRegId(AppSettings.getUid(), AppSettings.getRegId());
                 AppSettings.shouldUploadRegId = false;
             } else {
