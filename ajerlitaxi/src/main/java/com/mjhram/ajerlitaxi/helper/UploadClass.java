@@ -536,6 +536,10 @@ public class UploadClass {
                         //AppSettings.requestId = -1;
                         // Error occurred in registration. Get the error
                         // message
+                        int errorNo = jObj.getInt("error_no");
+                        if(errorNo == 1001) {
+                            EventBus.getDefault().post(new ServiceEvents.forceLogout());
+                        }
                         String errorMsg = jObj.getString("error_msg");//Error always false
                         Toast.makeText(cx,
                                 errorMsg, Toast.LENGTH_LONG).show();

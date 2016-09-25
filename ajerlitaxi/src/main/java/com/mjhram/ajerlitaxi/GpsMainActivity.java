@@ -269,8 +269,8 @@ public class GpsMainActivity extends GenericViewFragment
             uc.updateRegId(AppSettings.getUid(), regId);
         }
         checkGpsEnabled();
-        UploadClass uc = new UploadClass(this);
-        uc.getPassangerState(AppSettings.getUid());
+        //UploadClass uc = new UploadClass(this);
+        //uc.getPassangerState(AppSettings.getUid());
     }
 
             @Override
@@ -648,11 +648,7 @@ public class GpsMainActivity extends GenericViewFragment
                                 .show();
                         break;
                     case 14://logout
-                        EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));
-                        AppSettings.logout();
-                        Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(loginActivity);
-                        finish();
+                        logout();
                         break;
                     case 12://exit
                         EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));
@@ -671,6 +667,14 @@ public class GpsMainActivity extends GenericViewFragment
             }
         });
 
+    }
+
+    private void logout() {
+        EventBus.getDefault().post(new CommandEvents.RequestStartStop(false));
+        AppSettings.logout();
+        Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(loginActivity);
+        finish();
     }
 
     public void ToggleDrawer(){
@@ -968,6 +972,11 @@ public class GpsMainActivity extends GenericViewFragment
         }
         */
 
+    }
+
+    @EventBusHook
+    public void onEventMainThread(ServiceEvents.forceLogout tmp){
+        logout();
     }
 
     @EventBusHook

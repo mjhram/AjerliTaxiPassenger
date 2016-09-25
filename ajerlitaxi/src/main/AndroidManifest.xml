@@ -127,17 +127,13 @@
             </intent-filter>
         </service>
         <service
-            android:name=".gcm_client.MyInstanceIDListenerService">
+            android:name=".gcm_client.MyInstanceIDListenerService"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!--service
-            android:name=".gcm_client.MyInstanceIDListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service-->
 
         <!--service
             android:name=".gcm_client.MyInstanceIDListenerService"

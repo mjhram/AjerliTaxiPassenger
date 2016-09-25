@@ -8,6 +8,12 @@ import com.mjhram.ajerlitaxi.common.TRequestObj;
 import com.mjhram.ajerlitaxi.common.UserInfo;
 
 public class ServiceEvents {
+    public static class forceLogout {
+        public forceLogout() {
+
+        }
+    }
+
     public static class DriverLocationUpdate {
         public DriverInfo driverInfo;
         public DriverLocationUpdate(DriverInfo drvInfo) {
