@@ -43,7 +43,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,7 +52,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -96,6 +94,10 @@ import com.mjhram.ajerlitaxi.common.slf4j.SessionLogcatAppender;
 import com.mjhram.ajerlitaxi.helper.Constants;
 import com.mjhram.ajerlitaxi.helper.UploadClass;
 import com.mjhram.ajerlitaxi.login_register.LoginActivity;
+import com.mjhram.ajerlitaxi.state.passengerState_assigned;
+import com.mjhram.ajerlitaxi.state.passengerState_context;
+import com.mjhram.ajerlitaxi.state.passengerState_idle;
+import com.mjhram.ajerlitaxi.state.passengerState_reconnect;
 import com.mjhram.ajerlitaxi.views.GenericViewFragment;
 
 import org.slf4j.LoggerFactory;
@@ -125,10 +127,10 @@ public class GpsMainActivity extends GenericViewFragment
     private static Intent serviceIntent;
     private ActionBarDrawerToggle drawerToggle;
     private org.slf4j.Logger tracer;
-    private Button btnPickDrop;
-    private static int pickdropState = 0;//1=pick, 2=drop,
+    public Button btnPickDrop;
+    //private static int pickdropState = 0;//1=pick, 2=drop,
     //public static android.support.v4.app.FragmentManager fragmentManager;
-    private GoogleMap googleMap;
+    public GoogleMap googleMap;
     private  int    countOfDrivers=0;
     private Marker[] nearbyDrivers = null;
     //private Circle mapsSearchCircle = null;
@@ -136,25 +138,27 @@ public class GpsMainActivity extends GenericViewFragment
     private HashMap<Marker, DriverInfo> mMarkerInfoHash = new HashMap<>();
 
     //private ActionProcessButton actionButton;
-    private GoogleApiClient mGoogleApiClient;
+    public GoogleApiClient mGoogleApiClient;
     //private GoogleMap map;
-    private Marker fromMarker, toMarker, driverMarker;
-    private String fromDesc, toDesc;
-    private CountDownTimer countDownTimer;
+    public Marker fromMarker, toMarker, driverMarker;
+    public String fromDesc, toDesc;
+    public CountDownTimer countDownTimer;//
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private RelativeLayout driverInfoLayout;
-    private TextView txtDriverName;
-    private TextView txtDriverInfo;
-    private TextView btnDriverPhone;
-    private NetworkImageView networkImageViewDriver;
+    public RelativeLayout driverInfoLayout;
+    public TextView txtDriverName;
+    public TextView txtDriverInfo;
+    public TextView btnDriverPhone;
+    public NetworkImageView networkImageViewDriver;
 
     private RelativeLayout relativeLayoutAds;
     private ImageView btnAdsX;
     private NetworkImageView networkivAds;
     private TextView textviewAds;
-    private  RelativeLayout helpOverlayLayout;
+    public  RelativeLayout helpOverlayLayout;
 
     public String treqPhone, suggestedFee, noOfPassangers, additionalNotes;
+
+    public passengerState_context passengerStateContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +172,7 @@ public class GpsMainActivity extends GenericViewFragment
         loadPresetProperties();
 
         setContentView(R.layout.activity_gps_main);
+
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
@@ -257,6 +262,8 @@ public class GpsMainActivity extends GenericViewFragment
             tracer.debug("Start logging on app launch");
             EventBus.getDefault().postSticky(new CommandEvents.RequestStartStop(true));
         }*/
+        passengerStateContext = new passengerState_context(this);
+
         String regId = AppSettings.getRegId();
         if(regId == null || regId.isEmpty()) {
             String token = FirebaseInstanceId.getInstance().getToken();
@@ -281,7 +288,9 @@ public class GpsMainActivity extends GenericViewFragment
                                             @Override
                                             public void onMapClick(LatLng point) {
                                                 Log.d("Map","Map clicked");
-                                                if(pickdropState==0) {
+                                                passengerStateContext.mapClicked();
+
+                                                /*if(pickdropState==0) {
                                                     Location location = LocationServices.FusedLocationApi.getLastLocation(
                                                             mGoogleApiClient);
                                                     if (location != null) {
@@ -291,7 +300,7 @@ public class GpsMainActivity extends GenericViewFragment
                                                         Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
                                                                 , Toast.LENGTH_LONG).show();
                                                     }
-                                                }
+                                                }*/
                                             }
                                         }
 
@@ -862,7 +871,7 @@ public class GpsMainActivity extends GenericViewFragment
         }*/
     }
 
-    void setStateToIdle() {
+    /*private void setStateToIdle() {
         if(countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer=null;
@@ -950,9 +959,9 @@ public class GpsMainActivity extends GenericViewFragment
         int padding = 120; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cu);
-    }
+    }*/
 
-    private void clearDriversMarkers() {
+    public void clearDriversMarkers() {
         mMarkerInfoHash.clear();
         if(nearbyDrivers != null) {
             for (int i = 0; i < countOfDrivers; i++) {
@@ -1119,10 +1128,11 @@ public class GpsMainActivity extends GenericViewFragment
     @EventBusHook
     public void onEventMainThread(ServiceEvents.ErrorConnectionEvent erroConnectionEvent){
         tracer.debug("error getting state");
-        btnPickDrop.setText(getResources().getString(R.string.gpsMainBtnReconnect));
+        /*btnPickDrop.setText(getResources().getString(R.string.gpsMainBtnReconnect));
         btnPickDrop.setVisibility(View.VISIBLE);
         driverInfoLayout.setVisibility(View.INVISIBLE);
-        pickdropState = 20;
+        pickdropState = 20;*/
+        passengerStateContext.setState(passengerState_reconnect.getInstance(this, passengerStateContext));
     }
 
     @EventBusHook
@@ -1130,11 +1140,12 @@ public class GpsMainActivity extends GenericViewFragment
         TRequestObj tRequestObj = updateStateEvent.treqObj;
         if(tRequestObj == null) {
             //idle:
-            setStateToIdle();
+            passengerStateContext.setState(passengerState_idle.getInstance(this, passengerStateContext));
+            //setStateToIdle();
         } else {
-            setStateTo(tRequestObj);
+            passengerStateContext.setState(passengerState_assigned.getInstance(this, passengerStateContext, tRequestObj));
+            //setStateTo(tRequestObj);
         }
-
     }
 
     @EventBusHook
@@ -1169,9 +1180,10 @@ public class GpsMainActivity extends GenericViewFragment
     @EventBusHook
     public void onEventMainThread(ServiceEvents.CancelTRequests cancelTRequests){
         tracer.debug("cancel TRequest");
-        Utilities.MsgBox(getResources().getString(R.string.gpsMainMsgRequestCanceled), cancelTRequests.msg, this);
+        Toast.makeText(this, getResources().getString(R.string.gpsMainMsgRequestCanceled), Toast.LENGTH_LONG).show();
+        //Utilities.MsgBox(getResources().getString(R.string.gpsMainMsgRequestCanceled), cancelTRequests.msg, this);
         //cancelTRequest(Constants.TRequest_Canceled);
-        pickdropState=0;
+        //pickdropState=0;
         btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         //countDownTimer.cancel();
 
@@ -1460,7 +1472,7 @@ public class GpsMainActivity extends GenericViewFragment
         showPreferencesSummary();
     }*/
 
-    private void startCounter(int counterTimer) {
+    public void startCounter(int counterTimer) {
         if(countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer=null;
@@ -1475,22 +1487,17 @@ public class GpsMainActivity extends GenericViewFragment
             public void onFinish() {
                 //cancel the T-request
                 cancelTRequest(Constants.TRequest_Expired);
-                        /*//remove the T-request
-                        pickdropState=0;
-                        btnPickDrop.setText("Pick From...");
-                        UploadClass upload = new UploadClass(GpsMainActivity.this);
-                        if(AppSettings.requestId != -1) {
-                            upload.setTRequestState(Integer.toString(AppSettings.requestId), AppSettings.TRequest_Expired);
-                            AppSettings.requestId = -1;
-                        }*/
-                //setTRequestState(selectedTRequest.idx, selectedTRequest.passanger_id, AppSettings.TRequest_Assigned, AppSettings.getUid());
             }
         }.start();
     }
 
     @Override
     public void onBackPressed() {
-        switch(pickdropState) {
+        if(!passengerStateContext.backPressed()){
+            super.onBackPressed();
+        }
+
+        /*switch(pickdropState) {
             case 1:
                 setStateToIdle();
                 break;
@@ -1505,160 +1512,14 @@ public class GpsMainActivity extends GenericViewFragment
             default:
                 super.onBackPressed();
                 break;
-        }
+        }*/
     }
 
     public void onCloseHelpClicked(View v) {
         helpOverlayLayout.setVisibility(View.GONE);
     }
     public void onPickDropClick(View v) {
-        UploadClass uc;
-        switch(pickdropState) {
-            case 0://0 is idle, change to 1=pickFrom is assigned
-                if (mGoogleApiClient.isConnected()) {
-                    Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    if(mLastLocation == null) {
-                        Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
-                                , Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    LatLng currentPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                    //LatLng currentPosition = googleMap.getCameraPosition().target;
-                    if(fromMarker == null) {
-                        MarkerOptions markerOptions = new MarkerOptions()
-                                .position(currentPosition)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                //.draggable(true);
-                        ;
-                        fromMarker = googleMap.addMarker(markerOptions);
-                    } else {
-                        fromMarker.setPosition(currentPosition);
-                    }
-                    //This is not suitable, since onCamerachange is not called until touchUp
-                    /*map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                        @Override
-                        public void onCameraChange(CameraPosition position) {
-
-                            // Get the center of the Map.
-                            LatLng centerOfMap = map.getCameraPosition().target;
-
-                            // Update your Marker's position to the center of the Map.
-                            fromMarker.setPosition(centerOfMap);
-                        }
-                    });*/
-                }
-                {
-                    MaterialDialog alertDialog = new MaterialDialog.Builder(this)
-                            .title(getString(R.string.app_name))
-                            .content(getString(R.string.fromDesc))
-                            .inputType(InputType.TYPE_CLASS_TEXT)
-                            .input(getString(R.string.fromDescHint), null, new MaterialDialog.InputCallback() {
-                                @Override
-                                public void onInput(MaterialDialog dialog, CharSequence input) {
-                                    fromDesc = input.toString();
-                                }
-                            })
-                            .build();
-                    alertDialog.show();
-                }
-                pickdropState = 1;
-                btnPickDrop.setText(getString(R.string.gpsMainBtnDropto));
-
-                break;
-            case 1: //1=pickFrom is assigned, change to 2=drpTo is assigned
-                pickdropState = 2;
-                if (mGoogleApiClient.isConnected()) {
-                    //Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    LatLng currentPosition = googleMap.getCameraPosition().target;//new LatLng(fromMarker.getPosition().latitude, fromMarker.getPosition().longitude+.003);
-                    if(toMarker == null) {
-                        MarkerOptions markerOptions = new MarkerOptions()
-                                .position(currentPosition)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                                //.draggable(true)
-                        ;
-                        toMarker = googleMap.addMarker(markerOptions);
-                    } else {
-                        toMarker.setPosition(currentPosition);
-                    }
-                }
-                {
-                    MaterialDialog alertDialog = new MaterialDialog.Builder(this)
-                            .title(getString(R.string.app_name))
-                            .content(getString(R.string.toDesc))
-                            .inputType(InputType.TYPE_CLASS_TEXT)
-                            .input(getString(R.string.toDescHint), null, new MaterialDialog.InputCallback() {
-                                @Override
-                                public void onInput(MaterialDialog dialog, CharSequence input) {
-                                    toDesc = input.toString();
-                                }
-                            })
-                            .build();
-                    alertDialog.show();
-                }
-                btnPickDrop.setText(getString(R.string.gpsMainBtnConfirm));
-                break;
-            case 2://2=drpTo is assigned
-                //show dialog for additional info:
-                boolean wrapInScrollView = true;
-                MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .title(getString(R.string.gpsMainFeeDlgTitle))
-                        .customView(R.layout.dlg_fee, wrapInScrollView)
-                        .positiveText(getString(R.string.gpsMainFeeDlgPositive))
-                        //.negativeText("Cancel")
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                super.onPositive(dialog);
-                                EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
-                                EditText editTextFee = (EditText) dialog.getCustomView().findViewById(R.id.editTextFee);
-                                EditText editTextNoOfPassangers = (EditText) dialog.getCustomView().findViewById(R.id.editTextNoOfPassangers);
-                                EditText editTextAdditionalNotes = (EditText) dialog.getCustomView().findViewById(R.id.editTextAdditionalNotes);
-
-                                treqPhone = editTextPhone.getText().toString();
-                                suggestedFee = editTextFee.getText().toString();
-                                noOfPassangers = editTextNoOfPassangers.getText().toString();
-                                additionalNotes = editTextAdditionalNotes.getText().toString();
-
-                                pickdropState=3;
-                                clearDriversMarkers();
-                                startCounter(15*60);
-                                UploadClass upload = new UploadClass(GpsMainActivity.this);
-                                String lat1 = Double.toString(fromMarker.getPosition().latitude);
-                                String long1 = Double.toString(fromMarker.getPosition().longitude);
-                                String lat2 = Double.toString(toMarker.getPosition().latitude);
-                                String long2 = Double.toString(toMarker.getPosition().longitude);
-                                if(fromDesc ==null) {
-                                    fromDesc="";
-                                }
-                                if(toDesc ==null) {
-                                    toDesc="";
-                                }
-                                upload.addTRequest(AppSettings.getUid(), AppSettings.getEmail(),lat1, long1,
-                                        lat2,long2,
-                                        fromDesc, toDesc,
-                                        treqPhone, suggestedFee, noOfPassangers, additionalNotes);
-                                //setAdditionalFee(suggestedFee, noOfPassangers, additionalNotes);
-                                //dialog.dismiss();
-                            }
-                        })
-                        .build();
-                EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
-                String usrPhone = AppSettings.getPhone();
-                if(usrPhone!=null && !usrPhone.isEmpty()) {
-                    editTextPhone.setText(usrPhone);
-                }
-                dialog.show();
-                break;
-            case 3:
-                cancelTRequest(Constants.TRequest_Canceled);
-                break;
-            case 20://reconnect
-                uc = new UploadClass(this);
-                uc.getPassangerState(AppSettings.getUid());
-                break;
-
-        }
-
+        passengerStateContext.btnClicked();
     }
 
 
@@ -1668,16 +1529,16 @@ public class GpsMainActivity extends GenericViewFragment
         additionalNotes = notes;
     }*/
 
-    void cancelTRequest(String tReqState) {
-        pickdropState=0;
-        btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
+    public void cancelTRequest(String tReqState) {
+        //pickdropState=0;
+        //btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
         if(AppSettings.requestId != -1) {
             UploadClass upload = new UploadClass(GpsMainActivity.this);
             upload.setTRequestState(Integer.toString(AppSettings.requestId), tReqState);
             AppSettings.requestId = -1;
         }
-        setStateToIdle();
-        //countDownTimer.cancel();
+        passengerStateContext.setState(passengerState_idle.getInstance(this, passengerStateContext));
+        //setStateToIdle();
     }
 
     private ProgressDialog pDialog;
@@ -1710,4 +1571,360 @@ public class GpsMainActivity extends GenericViewFragment
                 break;
         }
     }*/
+
+    /*public interface passengerState {
+        void btnClicked();
+        void mapClicked();
+        boolean backPressed();
+    }
+
+    public class passengerState_context implements passengerState {
+        private passengerState state;
+        public void setState(passengerState aState) {
+            state  = aState;
+        }
+        public passengerState_context() {
+            setState(new passengerState_idle(this));
+        }
+
+        public void btnClicked(){
+            state.btnClicked();
+        }
+        public void mapClicked(){
+            state.mapClicked();
+        }
+        public boolean backPressed(){
+            return state.backPressed();
+        }
+
+    }
+
+    public class passengerState_idle implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_idle(passengerState_context aStateContext){
+            stateContext = aStateContext;
+
+            if(countDownTimer != null) {
+                countDownTimer.cancel();
+                countDownTimer=null;
+            }
+
+            AppSettings.requestId = -1;
+            pickdropState=0;
+
+            btnPickDrop.setVisibility(View.VISIBLE);
+            btnPickDrop.setText(getString(R.string.gpsMainBtnPickFrom));
+            driverInfoLayout.setVisibility(View.INVISIBLE);
+            if(fromMarker != null) {
+                fromMarker.remove();
+                fromMarker = null;
+            }
+            if(toMarker != null) {
+                toMarker.remove();
+                toMarker = null;
+            }
+            if(driverMarker != null) {
+                driverMarker.remove();
+                driverMarker = null;
+            }
+        }
+
+        public void btnClicked(){
+            if (mGoogleApiClient.isConnected()) {
+                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if(mLastLocation == null) {
+                    Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
+                            , Toast.LENGTH_LONG).show();
+                    return;
+                }
+                LatLng currentPosition = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                //LatLng currentPosition = googleMap.getCameraPosition().target;
+                if(fromMarker == null) {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(currentPosition)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                            //.draggable(true);
+                            ;
+                    fromMarker = googleMap.addMarker(markerOptions);
+                } else {
+                    fromMarker.setPosition(currentPosition);
+                }
+            }
+            {
+                MaterialDialog alertDialog = new MaterialDialog.Builder(GpsMainActivity.this)
+                        .title(getString(R.string.app_name))
+                        .content(getString(R.string.fromDesc))
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(getString(R.string.fromDescHint), null, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                fromDesc = input.toString();
+                            }
+                        })
+                        .build();
+                alertDialog.show();
+            }
+
+            stateContext.setState(new passengerState_pickFrom(stateContext));
+        }
+        public void mapClicked(){
+            Location location = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (location != null) {
+                UploadClass uc = new UploadClass(GpsMainActivity.this);
+                uc.getNearbyDrivers(location);
+            } else {
+                Toast.makeText(getApplicationContext(),getString(R.string.str_noLocation)
+                        , Toast.LENGTH_LONG).show();
+            }
+        }
+        public boolean backPressed(){
+            return false;
+        }
+    }
+
+    public class passengerState_pickFrom implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_pickFrom(passengerState_context aStateContext) {
+            pickdropState=1;
+            btnPickDrop.setText(getString(R.string.gpsMainBtnDropto));
+            if(toMarker != null) {
+                toMarker.remove();
+                toMarker = null;
+            }
+            stateContext = aStateContext;
+        }
+
+        public void btnClicked(){
+            pickdropState = 2;
+            if (mGoogleApiClient.isConnected()) {
+                //Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                LatLng currentPosition = googleMap.getCameraPosition().target;//new LatLng(fromMarker.getPosition().latitude, fromMarker.getPosition().longitude+.003);
+                if(toMarker == null) {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(currentPosition)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            //.draggable(true)
+                            ;
+                    toMarker = googleMap.addMarker(markerOptions);
+                } else {
+                    toMarker.setPosition(currentPosition);
+                }
+            }
+            {
+                MaterialDialog alertDialog = new MaterialDialog.Builder(GpsMainActivity.this)
+                        .title(getString(R.string.app_name))
+                        .content(getString(R.string.toDesc))
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(getString(R.string.toDescHint), null, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                toDesc = input.toString();
+                            }
+                        })
+                        .build();
+                alertDialog.show();
+            }
+            btnPickDrop.setText(getString(R.string.gpsMainBtnConfirm));
+
+            stateContext.setState(new passengerState_dropTo(stateContext));
+        }
+        public void mapClicked(){}
+        public boolean backPressed(){
+            stateContext.setState(new passengerState_idle(stateContext));
+            return true;
+        }
+    }
+
+    public class passengerState_dropTo implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_dropTo(passengerState_context aStateContext) {
+            pickdropState=2;
+            stateContext = aStateContext;
+        }
+
+        public void btnClicked(){
+            boolean wrapInScrollView = true;
+            MaterialDialog dialog = new MaterialDialog.Builder(GpsMainActivity.this)
+                    .title(getString(R.string.gpsMainFeeDlgTitle))
+                    .customView(R.layout.dlg_fee, wrapInScrollView)
+                    .positiveText(getString(R.string.gpsMainFeeDlgPositive))
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
+                            EditText editTextFee = (EditText) dialog.getCustomView().findViewById(R.id.editTextFee);
+                            EditText editTextNoOfPassangers = (EditText) dialog.getCustomView().findViewById(R.id.editTextNoOfPassangers);
+                            EditText editTextAdditionalNotes = (EditText) dialog.getCustomView().findViewById(R.id.editTextAdditionalNotes);
+
+                            treqPhone = editTextPhone.getText().toString();
+                            suggestedFee = editTextFee.getText().toString();
+                            noOfPassangers = editTextNoOfPassangers.getText().toString();
+                            additionalNotes = editTextAdditionalNotes.getText().toString();
+
+
+                            UploadClass upload = new UploadClass(GpsMainActivity.this);
+                            String lat1 = Double.toString(fromMarker.getPosition().latitude);
+                            String long1 = Double.toString(fromMarker.getPosition().longitude);
+                            String lat2 = Double.toString(toMarker.getPosition().latitude);
+                            String long2 = Double.toString(toMarker.getPosition().longitude);
+                            if(fromDesc ==null) {
+                                fromDesc="";
+                            }
+                            if(toDesc ==null) {
+                                toDesc="";
+                            }
+                            upload.addTRequest(AppSettings.getUid(), AppSettings.getEmail(),lat1, long1,
+                                    lat2,long2,
+                                    fromDesc, toDesc,
+                                    treqPhone, suggestedFee, noOfPassangers, additionalNotes);
+
+                            stateContext.setState(new passengerState_cancel(stateContext, 15*60));
+                        }
+                    })
+                    .build();
+            EditText editTextPhone = (EditText) dialog.getCustomView().findViewById(R.id.editTextPhone);
+            String usrPhone = AppSettings.getPhone();
+            if(usrPhone!=null && !usrPhone.isEmpty()) {
+                editTextPhone.setText(usrPhone);
+            }
+            dialog.show();
+        }
+        public void mapClicked(){}
+        public boolean backPressed(){
+            stateContext.setState(new passengerState_pickFrom(stateContext));
+            //pickdropState=1;
+            //btnPickDrop.setText(getString(R.string.gpsMainBtnDropto));
+            return true;
+        }
+    }
+
+    public class passengerState_cancel implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_cancel(passengerState_context aStateContext, int counter) {
+            pickdropState=3;
+            btnPickDrop.setVisibility(View.VISIBLE);
+            driverInfoLayout.setVisibility(View.INVISIBLE);
+            clearDriversMarkers();
+            startCounter(counter);
+            stateContext = aStateContext;
+        }
+
+        public void btnClicked(){
+            cancelTRequest(Constants.TRequest_Canceled);
+
+            //stateContext.setState(new passengerState_idle(stateContext));
+        }
+
+        public void mapClicked(){}
+        public boolean backPressed(){
+            return false;
+        }
+    }
+
+    public class passengerState_reconnect implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_reconnect(passengerState_context aStateContext) {
+            pickdropState=20;
+            btnPickDrop.setText(getResources().getString(R.string.gpsMainBtnReconnect));
+            btnPickDrop.setVisibility(View.VISIBLE);
+            driverInfoLayout.setVisibility(View.INVISIBLE);
+
+            stateContext = aStateContext;
+        }
+        public void btnClicked(){
+            UploadClass uc = new UploadClass(GpsMainActivity.this);
+            uc.getPassangerState(AppSettings.getUid());
+        }
+        public void mapClicked(){}
+        public boolean backPressed(){
+            return false;
+        }
+    }
+
+    public class passengerState_assigned implements passengerState {
+        private passengerState_context stateContext;
+
+        public passengerState_assigned(passengerState_context aStateContext, TRequestObj tRequestObj) {
+            pickdropState=30;
+            stateContext = aStateContext;
+
+            helpOverlayLayout.setVisibility(View.GONE);
+            btnPickDrop.setVisibility(View.GONE);
+            driverInfoLayout.setVisibility(View.VISIBLE);
+            txtDriverName.setText(tRequestObj.driverName);
+            txtDriverInfo.setText(tRequestObj.driverInfo);
+            btnDriverPhone.setText(tRequestObj.driverPhone);
+            {
+                //final String IMAGE_URL = "http://developer.android.com/images/training/system-ui.png";
+                ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
+                networkImageViewDriver.setImageUrl(tRequestObj.driverPhotoUrl, mImageLoader);
+            }
+            //driver not assigned yet & 15min elapsed => neglect it
+            if(Integer.parseInt(tRequestObj.driverId) == -1) {
+                int remainingSeconds = 900 - Integer.parseInt(tRequestObj.secondsToNow);
+                if(remainingSeconds < 5) {
+                    stateContext.setState(new passengerState_idle(stateContext));
+                    return;
+                } else {
+                    //set timer to remainingSeconds
+                    //startCounter(remainingSeconds);
+                    stateContext.setState(new passengerState_cancel(stateContext, remainingSeconds));
+                    AppSettings.requestId = tRequestObj.idx;
+                    //pickdropState=3;
+                    //btnPickDrop.setVisibility(View.VISIBLE);
+                    //driverInfoLayout.setVisibility(View.INVISIBLE);
+                }
+            }
+            //2. driver assigned or passanger picked
+            zoom2TReqObj(tRequestObj);
+        }
+        public void btnClicked(){}
+        public void mapClicked(){}
+        public boolean backPressed(){
+            return false;
+        }
+    }
+    */
+    public void zoom2TReqObj(TRequestObj tRequestObj) {
+        LatLng currentPosition = new LatLng(tRequestObj.fromLat, tRequestObj.fromLong);
+        if(fromMarker == null) {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(currentPosition)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    //.draggable(true)
+                    ;
+            ;
+            fromMarker = googleMap.addMarker(markerOptions);
+        } else {
+            fromMarker.setPosition(currentPosition);
+        }
+
+        currentPosition = new LatLng(tRequestObj.toLat, tRequestObj.toLong);
+        if (toMarker == null) {
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(currentPosition)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    //.draggable(false)
+                    ;
+            toMarker = googleMap.addMarker(markerOptions);
+        } else {
+            toMarker.setPosition(currentPosition);
+        }
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        {
+            builder.include(fromMarker.getPosition());
+            builder.include(toMarker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 120; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.animateCamera(cu);
+    }
 }
