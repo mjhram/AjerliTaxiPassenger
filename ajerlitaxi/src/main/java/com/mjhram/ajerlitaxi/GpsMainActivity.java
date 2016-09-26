@@ -1115,8 +1115,18 @@ public class GpsMainActivity extends GenericViewFragment
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
+                            String url = "market://details?id=" + getPackageName();//getString(R.string.appGoogleLink);
+                            if(AppSettings.getChosenLanguage() == "ar") {
+                                url += "&hl=ar";
+                            }
+
                             dialog.dismiss();
-                            finish();
+
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+
+                            GpsMainActivity.this.finish();
                             return;
                         }
                     })

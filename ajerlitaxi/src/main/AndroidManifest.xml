@@ -9,6 +9,8 @@
         android:protectionLevel="signature" /-->
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- For Tableys, call phone may not be available, but let app to be installed on them by feature-required=false-->
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
     <!--uses-permission android:name="com.mjhram.ajerlitaxi.permission.C2D_MESSAGE" /-->
     <!--uses-permission android:name="com.google.android.c2dm.permission.SEND" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /-->
