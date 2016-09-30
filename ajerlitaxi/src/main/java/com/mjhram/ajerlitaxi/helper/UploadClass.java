@@ -49,16 +49,20 @@ public class UploadClass {
     public UploadClass(Context theCx) {
         cx = theCx;
         phpErrorMsgs = AppSettings.getInstance().getPhpErrorMsg();
-        pDialog = new ProgressDialog(cx);
-        pDialog.setCancelable(false);
+        if(cx == null) {
+            pDialog = null;
+        }else{
+            pDialog = new ProgressDialog(cx);
+            pDialog.setCancelable(false);
+        }
 
     }
 
-    public void updateRegId(final String userId, final String regId) {
+    public static void updateRegId(final String userId, final String regId) {
         String tag_string_req = "regId_update";
 
-        pDialog.setMessage(cx.getString(R.string.gpsMainDlgMsgUpdating));
-        showDialog();
+        //pDialog.setMessage(cx.getString(R.string.gpsMainDlgMsgUpdating));
+        //showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 Constants.URL_UpdateRegId, new Response.Listener<String>() {
@@ -66,16 +70,16 @@ public class UploadClass {
             @Override
             public void onResponse(String response) {
                 Log.d(AppSettings.TAG, "update reg id Response: " + response.toString());
-                hideDialog();
+                //hideDialog();
                 AppSettings.setRegId(userId);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(AppSettings.TAG, "Update Error: " + error.getMessage());
-                Toast.makeText(cx,
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
+                //Toast.makeText(cx,
+                //        error.getMessage(), Toast.LENGTH_LONG).show();
+                //hideDialog();
             }
         }) {
 
