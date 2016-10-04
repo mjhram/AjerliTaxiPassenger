@@ -69,7 +69,13 @@ public class MyGcmListenerService extends FirebaseMessagingService {
                 } else if (tag.equalsIgnoreCase("treqState")) {
                     String state = msgObj.getString("data");//Integer.parseInt(message);
                     EventBus.getDefault().post(new ServiceEvents.TRequestUpdated(state));
-                    message = getString(R.string.gcmTReqUpdated);//getString(R.string.gcmClientReqState) + state;
+                    if(state.equalsIgnoreCase("picked")) {
+                        message = getString(R.string.gcmTReqDriverArrived);
+                    } else if(state.equalsIgnoreCase("done")) {
+                        message = getString(R.string.gcmTReqDone);
+                    } else {
+                        message = getString(R.string.gcmTReqUpdated);
+                    }
                 } else if (tag.equalsIgnoreCase("drvLoc")) {
                     DriverInfo driverInfo = new DriverInfo();
                     driverInfo.driverId = msgObj.getInt("drvId");

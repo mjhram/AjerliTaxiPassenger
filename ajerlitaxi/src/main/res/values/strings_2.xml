@@ -54,6 +54,8 @@
     <string name="gcmClientGcmMsg">AjerliTaxi Passenger</string>
     <string name="gcmTReqAccepted">Taxi Request Accepted</string>
     <string name="gcmTReqUpdated">Request State Updated</string>
+    <string name="gcmTReqDriverArrived">Driver Arrived</string>
+    <string name="gcmTReqDone">Request Done</string>
 
 
     <string name="appAbout">AjerliTaxiPassenger Version: </string>

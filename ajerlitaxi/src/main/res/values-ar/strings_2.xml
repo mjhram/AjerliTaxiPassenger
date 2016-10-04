@@ -19,7 +19,7 @@
     <string name="dlgPhone">رقم الموبايل</string>
     <string name="dlgPhoneEx">مثلا: 07787654321</string>
     <string name="dlgNoOfPassengers">عدد الركاب</string>
-    <string name="dlgAdditionalCarry">حمولة اوملاحضات اضافية</string>
+    <string name="dlgAdditionalCarry">حمولة اوملاحظات اضافية</string>
     <string name="dlgAdditionalCarryEx">مثلا: 3 حقائب متوسطة الحجم</string>
 
     <string name="gpsMainBtnReconnect">اعادة ربط</string>
@@ -29,7 +29,7 @@
     <string name="gpsMainBtnConfirm">تأكيد...</string>
     <string name="gpsMainBtnPickFrom">اركب من...</string>
 
-    <string name="gpsMainFeeDlgTitle">الاجرة وملاحضات اخرى</string>
+    <string name="gpsMainFeeDlgTitle">الاجرة وملاحظات اخرى</string>
     <string name="gpsMainFeeDlgPositive">تأكيد</string>
 
     <string name="gpsMainDlgMsgUpdating">تحديث...</string>
@@ -54,6 +54,8 @@
     <string name="gcmClientReqState">حالة الطلب:</string>
     <string name="gcmTReqAccepted">تم قبول طلب التكسي</string>
     <string name="gcmTReqUpdated">تم تحديث حالة الطلب</string>
+    <string name="gcmTReqDriverArrived">السائق وصل</string>
+    <string name="gcmTReqDone">الطلب اكتمل</string>
 
     <string name="appAbout">AjerliTaxiDriver الاصدار:</string>
     <string name="str_default">افتراضي</string>
@@ -66,7 +68,7 @@
     <string name="infoTime">الوقت:</string>
     <string name="infoNoPassengers">عدد الركاب:</string>
     <string name="infoFee">الاجرة:</string>
-    <string name="infoNotes">ملاحضات:</string>
+    <string name="infoNotes">ملاحظات:</string>
     <string name="infoFromDesc">من:</string>
     <string name="infoToDesc">الى:</string>
     <string name="infoTrip">الرحلة:</string>
