@@ -9,5 +9,6 @@ public class DriverInfo {
     //used to hold nearby drivers info
     public String updatedAtTime, name, phone;
     public int imageId;
-
+    //for related marker
+    public boolean infoWindowIsShown;
 }

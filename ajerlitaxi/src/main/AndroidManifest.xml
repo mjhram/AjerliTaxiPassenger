@@ -123,13 +123,17 @@
             </intent-filter>
         </service-->
         <service
-            android:name=".gcm_client.MyGcmListenerService">
+            android:name=".gcm_client.MyGcmListenerService"
+            android:enabled="true"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
             android:name=".gcm_client.MyInstanceIDListenerService"
+            android:enabled="true"
             android:exported="true"
             >
             <intent-filter>

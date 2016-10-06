@@ -3,6 +3,7 @@ package com.mjhram.ajerlitaxi.state;
 import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.google.android.gms.maps.model.Marker;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.common.AppSettings;
 import com.mjhram.ajerlitaxi.common.TRequestObj;
@@ -23,7 +24,7 @@ public class passengerState_assigned implements passengerState {
         assignedState.mainActivity = theActivity;
         assignedState.stateContext = aStateContext;
         assignedState.tRequestObj = tReqObj;
-        assignedState.onEnter();
+        //assignedState.onEnter();
         return assignedState;
     }
     public void onEnter() {
@@ -60,6 +61,9 @@ public class passengerState_assigned implements passengerState {
     }
     public void btnClicked(){}
     public void mapClicked(){}
+    public boolean markerClicked(Marker marker){
+        return true;
+    }
     public boolean backPressed(){
         return false;
     }

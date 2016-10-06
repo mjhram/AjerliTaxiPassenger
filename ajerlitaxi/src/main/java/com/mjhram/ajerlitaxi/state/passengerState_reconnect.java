@@ -2,6 +2,7 @@ package com.mjhram.ajerlitaxi.state;
 
 import android.view.View;
 
+import com.google.android.gms.maps.model.Marker;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
@@ -21,7 +22,7 @@ public class passengerState_reconnect implements passengerState {
         }
         reconnectState.mainActivity = theActivity;
         reconnectState.stateContext = aStateContext;
-        reconnectState.onEnter();
+        //reconnectState.onEnter();
         return reconnectState;
     }
 
@@ -36,6 +37,9 @@ public class passengerState_reconnect implements passengerState {
         uc.getPassangerState(AppSettings.getUid());
     }
     public void mapClicked(){}
+    public boolean markerClicked(Marker marker){
+        return true;
+    }
     public boolean backPressed(){
         return false;
     }

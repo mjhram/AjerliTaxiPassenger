@@ -135,7 +135,7 @@ public class GpsMainActivity extends GenericViewFragment
     private Marker[] nearbyDrivers = null;
     //private Circle mapsSearchCircle = null;
     private Polygon searchPolygon;
-    private HashMap<Marker, DriverInfo> mMarkerInfoHash = new HashMap<>();
+    public HashMap<Marker, DriverInfo> mMarkerInfoHash = new HashMap<>();
 
     //private ActionProcessButton actionButton;
     public GoogleApiClient mGoogleApiClient;
@@ -306,6 +306,7 @@ public class GpsMainActivity extends GenericViewFragment
 
         );
         googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(this, mMarkerInfoHash));
+        googleMap.setOnMarkerClickListener(new MarkerClickListener());
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -352,6 +353,16 @@ public class GpsMainActivity extends GenericViewFragment
 
         }*/
     }
+
+    public Marker lastMarker;
+
+    private class MarkerClickListener implements GoogleMap.OnMarkerClickListener {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            return passengerStateContext.markerClicked(marker);
+        }
+    }
+
             @Override
             public void onConnected(Bundle connectionHint) {
                 Location location = LocationServices.FusedLocationApi.getLastLocation(
@@ -1486,6 +1497,9 @@ public class GpsMainActivity extends GenericViewFragment
         if(countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer=null;
+        }
+        if(counterTimer>100000) {
+            counterTimer = 100000;
         }
         countDownTimer = new CountDownTimer(counterTimer*1000, 1000) {
             public void onTick(long millisUntilFinished) {

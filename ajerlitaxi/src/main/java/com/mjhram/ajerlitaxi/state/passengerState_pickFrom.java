@@ -5,6 +5,7 @@ import android.text.InputType;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
@@ -23,7 +24,7 @@ public class passengerState_pickFrom implements passengerState {
         }
         pickState.mainActivity = theActivity;
         pickState.stateContext = aStateContext;
-        pickState.onEnter();
+        //pickState.onEnter();
         return pickState;
     }
 
@@ -39,6 +40,9 @@ public class passengerState_pickFrom implements passengerState {
         }
     }
 
+    public boolean markerClicked(Marker marker){
+        return true;
+    }
     public void btnClicked(){
         //pickdropState = 2;
         if (mainActivity.mGoogleApiClient.isConnected()) {

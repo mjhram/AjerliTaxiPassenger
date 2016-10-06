@@ -2,6 +2,7 @@ package com.mjhram.ajerlitaxi.state;
 
 import android.view.View;
 
+import com.google.android.gms.maps.model.Marker;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.helper.Constants;
 
@@ -22,7 +23,7 @@ public class passengerState_cancel implements passengerState {
         stateCancel.counter = theCounter;
         stateCancel.mainActivity = theActivity;
         stateCancel.stateContext = aStateContext;
-        stateCancel.onEnter();
+        //stateCancel.onEnter();
         return stateCancel;
     }
 
@@ -46,6 +47,9 @@ public class passengerState_cancel implements passengerState {
     }
 
     public void mapClicked(){}
+    public boolean markerClicked(Marker marker){
+        return true;
+    }
     public boolean backPressed(){
         return false;
     }

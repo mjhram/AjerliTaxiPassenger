@@ -1,5 +1,6 @@
 package com.mjhram.ajerlitaxi.state;
 
+import com.google.android.gms.maps.model.Marker;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 
 /**
@@ -27,6 +28,7 @@ public class passengerState_context implements passengerState {
     public void mapClicked(){
         state.mapClicked();
     }
+    public boolean markerClicked(Marker marker){return state.markerClicked(marker);}
     public boolean backPressed(){
         return state.backPressed();
     }

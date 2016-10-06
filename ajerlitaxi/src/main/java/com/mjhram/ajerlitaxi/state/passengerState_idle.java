@@ -9,10 +9,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
+import com.mjhram.ajerlitaxi.common.DriverInfo;
 import com.mjhram.ajerlitaxi.helper.UploadClass;
 
 /**
@@ -107,6 +109,49 @@ public class passengerState_idle implements passengerState {
                     , Toast.LENGTH_LONG).show();
         }
     }
+
+    public boolean markerClicked(Marker marker){
+        DriverInfo tReq = mainActivity.mMarkerInfoHash.get(marker);
+        if(tReq == null) {
+            return false;
+        }
+        if(mainActivity.lastMarker == null){
+            marker.showInfoWindow();
+            mainActivity.lastMarker = marker;
+            tReq.infoWindowIsShown=true;
+        }else if (marker.getId().equals(mainActivity.lastMarker.getId())) {
+            if (tReq.infoWindowIsShown) {
+                marker.hideInfoWindow();
+                tReq.infoWindowIsShown = false;
+            } else {
+                marker.showInfoWindow();
+                tReq.infoWindowIsShown = true;
+            }
+        } else{
+            if (tReq.infoWindowIsShown) {//если открыто инфовиндов предыдущего маркера, скрываем его
+                mainActivity.lastMarker.hideInfoWindow();
+                DriverInfo lastTReq = mainActivity.mMarkerInfoHash.get(mainActivity.lastMarker);
+                if(lastTReq != null) {
+                    lastTReq.infoWindowIsShown = false;
+                }
+                marker.showInfoWindow();
+                tReq.infoWindowIsShown = true;
+                mainActivity.lastMarker = marker;
+            } else {
+                DriverInfo lastTReq = mainActivity.mMarkerInfoHash.get(mainActivity.lastMarker);
+                if(lastTReq != null) {
+                    lastTReq.infoWindowIsShown = false;
+                }
+
+                marker.showInfoWindow();
+                tReq.infoWindowIsShown = true;
+                mainActivity.lastMarker = marker;
+            }
+        }
+
+        return true;
+    }
+
     public boolean backPressed(){
         return false;
     }

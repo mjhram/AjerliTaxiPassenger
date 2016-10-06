@@ -3,6 +3,7 @@ package com.mjhram.ajerlitaxi.state;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.maps.model.Marker;
 import com.mjhram.ajerlitaxi.GpsMainActivity;
 import com.mjhram.ajerlitaxi.R;
 import com.mjhram.ajerlitaxi.common.AppSettings;
@@ -22,7 +23,7 @@ public class passengerState_dropTo implements passengerState {
         }
         dropState.stateContext = aStateContext;
         dropState.mainActivity = theActivity;
-        dropState.onEnter();
+        //dropState.onEnter();
         return dropState;
     }
 
@@ -82,6 +83,10 @@ public class passengerState_dropTo implements passengerState {
         dialog.show();
     }
     public void mapClicked(){}
+    public boolean markerClicked(Marker marker){
+        return true;
+    }
+
     public boolean backPressed(){
         stateContext.setState(passengerState_pickFrom.getInstance(mainActivity, stateContext));
         //pickdropState=1;
