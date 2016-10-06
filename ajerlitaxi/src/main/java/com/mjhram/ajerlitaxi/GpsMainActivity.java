@@ -19,11 +19,8 @@ package com.mjhram.ajerlitaxi;
 
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -38,7 +35,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -143,7 +139,7 @@ public class GpsMainActivity extends GenericViewFragment
     public Marker fromMarker, toMarker, driverMarker;
     public String fromDesc, toDesc;
     public CountDownTimer countDownTimer;//
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    //private BroadcastReceiver mRegistrationBroadcastReceiver;
     public RelativeLayout driverInfoLayout;
     public TextView txtDriverName;
     public TextView txtDriverInfo;
@@ -238,7 +234,7 @@ public class GpsMainActivity extends GenericViewFragment
             //final String IMAGE_URL = "http://developer.android.com/images/training/system-ui.png";
             ImageLoader mImageLoader = AppSettings.getInstance().getImageLoader();
             networkivAds.setImageUrl(Constants.URL_ads+".jpg", mImageLoader);
-        }*/
+        }
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -247,7 +243,7 @@ public class GpsMainActivity extends GenericViewFragment
                 int drvId = intent.getIntExtra("drvId", -1);
                 //updateRequests(treqId);
             }
-        };
+        };*/
         buildGoogleApiClient();
         /*mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -419,8 +415,8 @@ public class GpsMainActivity extends GenericViewFragment
 
         super.onResume();
         EventBus.getDefault().post(new ServiceEvents.GetPassengerStateEvent());
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Constants.UPDATE_REQ));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+        //        new IntentFilter(Constants.UPDATE_REQ));
         mGoogleApiClient.connect();
         //StartAndBindService();
 
@@ -430,7 +426,7 @@ public class GpsMainActivity extends GenericViewFragment
     @Override
     protected void onPause() {
         //StopAndUnbindServiceIfRequired();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
         //mGoogleApiClient.connect();
     }

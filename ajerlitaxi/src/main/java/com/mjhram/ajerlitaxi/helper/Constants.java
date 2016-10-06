@@ -29,8 +29,8 @@ public interface Constants {
     String KEY_UID = "key_uid";
 	String KEY_REGID = "key_RegId";
 	String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-	String REGISTRATION_COMPLETE = "registrationComplete";
-    String UPDATE_REQ = "updateRequest";
+	//String REGISTRATION_COMPLETE = "registrationComplete";
+    //String UPDATE_REQ = "updateRequest";
 	String KEY_IS_ShowHelpOverlay = "isShowHelpOverlay";
 
 	String URL_REGISTER = Constants.SERVER_URL + "/login_register.php";

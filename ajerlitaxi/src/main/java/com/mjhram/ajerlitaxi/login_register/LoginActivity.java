@@ -8,14 +8,8 @@ package com.mjhram.ajerlitaxi.login_register;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -54,7 +48,7 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     //private SessionManager session;
     //private GcmUtil gcmUtil;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    //private BroadcastReceiver mRegistrationBroadcastReceiver;
     //private ProgressBar mRegistrationProgressBar;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private phpErrorMessages phpErrorMsgs;
@@ -82,7 +76,7 @@ public class LoginActivity extends Activity {
         pDialog.setCancelable(false);
 
         //get GCM registeration ID:
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+        /*mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
@@ -91,13 +85,13 @@ public class LoginActivity extends Activity {
                 boolean sentToken = sharedPreferences
                         .getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
 
-                /*if (sentToken) {
-                    setButtons(true);
-                } else {
-                    setButtons(false);
-                }*/
+                //if (sentToken) {
+                //    setButtons(true);
+                //} else {
+                //    setButtons(false);
+                //}
             }
-        };
+        };*/
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             //Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -290,13 +284,13 @@ public class LoginActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(Constants.REGISTRATION_COMPLETE));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+        //        new IntentFilter(Constants.REGISTRATION_COMPLETE));
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
 
